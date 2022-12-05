@@ -1,11 +1,13 @@
 // 目标：写一个程序，将平时的SVN地址格式转换一下
 
 #![windows_subsystem = "windows"]
+
 use druid::widget::Flex;
 use druid::{
     widget::{Button, TextBox},
     AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
 };
+
 #[derive(Debug, Data, Clone, Lens)]
 struct SVNAddress {
     old: String,
@@ -35,13 +37,16 @@ fn main() {
 
 fn convert_address(src: &String) -> String {
     let header = "http://172.17.102.22:18080/svn/softwarerepo";
-
+    let mut ret;
     if src.contains(header) {
-        src.replace(header, "softwarerepo:")
+        ret = src.replace(header, "softwarerepo:").trim_end_matches("/").to_string();
+        ret = format!("[{}]", ret);
     } else {
-        "格式错误".to_owned()
+        ret = "格式错误".to_owned()
     }
+    ret
 }
+
 fn build_root_widget() -> impl Widget<SVNAddress> {
     // let new_text = Label::new(|data: &SVNAddress, _env: &Env| {
     //     if data.old.is_empty() {
