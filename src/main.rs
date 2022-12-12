@@ -39,7 +39,7 @@ fn convert_address(src: &String) -> String {
     let header = "http://172.17.102.22:18080/svn/softwarerepo";
     let mut ret;
     if src.contains(header) {
-        ret = src.replace(header, "softwarerepo:").trim_end_matches("/").to_string();
+        ret = src.replace(header, "softwarerepo:").trim_end_matches(|c| c == '/' || c == ' ').to_string();
         ret = format!("[{}]", ret);
     } else {
         ret = "格式错误".to_owned()
