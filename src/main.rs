@@ -2,7 +2,7 @@
 
 #![windows_subsystem = "windows"]
 
-use druid::widget::Flex;
+use druid::widget::{Flex, Label, Split, Tabs};
 use druid::{
     widget::{Button, TextBox},
     AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
@@ -12,6 +12,7 @@ use druid::{
 struct SVNAddress {
     old: String,
     new: String,
+    name: String,
 }
 
 impl SVNAddress {
@@ -22,11 +23,12 @@ impl SVNAddress {
 
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())
-        .title("SVN 地址转换")
+        .title("小工具")
         .window_size((400.0, 400.0));
     let initial_state: SVNAddress = SVNAddress {
         old: "".into(),
         new: "".into(),
+        name: "t".into(),
     };
 
     AppLauncher::with_window(main_window)
@@ -47,6 +49,11 @@ fn convert_address(src: &String) -> String {
     ret
 }
 
+#[derive(Data, Clone, Lens)]
+struct AppState {
+    name: String,
+}
+
 fn build_root_widget() -> impl Widget<SVNAddress> {
     // let new_text = Label::new(|data: &SVNAddress, _env: &Env| {
     //     if data.old.is_empty() {
@@ -55,6 +62,8 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     //         convert_address(&data.old)
     //     }
     // });
+
+    let label_svn = Label::new("SVN 地址转换：");
 
     let textbox = TextBox::multiline()
         .with_placeholder("原始地址")
@@ -67,11 +76,20 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         .lens(SVNAddress::new);
 
     let button1 = Button::<SVNAddress>::new("转换").on_click(|_ctx, _data, _env| _data.update());
-    Flex::column()
+
+    let svn_column = Flex::column()
+        .with_child(label_svn)
         .with_flex_child(textbox_out, 1.0)
         .with_default_spacer()
         .with_flex_child(textbox, 1.0)
         .with_default_spacer()
         .with_child(button1)
-        .align_vertical(druid::UnitPoint::CENTER)
+        .align_vertical(druid::UnitPoint::CENTER);
+
+    let tabs = Tabs::new()
+        .with_tab("SVN地址转换", svn_column)
+        .with_tab("Proxy", Label::new("Proxy settings"));
+
+    Flex::row()
+        .with_flex_child(tabs, 1.0)
 }
