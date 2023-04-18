@@ -2,7 +2,7 @@
 
 #![windows_subsystem = "windows"]
 
-use druid::widget::{Flex, Label, Split, Tabs};
+use druid::widget::{Flex, Label,  Tabs};
 use druid::{
     widget::{Button, TextBox},
     AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
