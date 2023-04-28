@@ -2,6 +2,8 @@
 
 #![windows_subsystem = "windows"]
 
+mod tests;
+
 use druid::widget::{Flex, Label, Tabs};
 use druid::{
     widget::{Button, TextBox},
@@ -10,19 +12,49 @@ use druid::{
 use clipboard::ClipboardProvider;
 use clipboard::ClipboardContext;
 
+const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
+
 #[derive(Debug, Data, Clone, Lens)]
 struct SVNAddress {
     old: String,
-    new: String,
+    #[data(eq)]
+
+    new_addr: Vec<String>,
+    new_addr_display:String,
     name: String,
 }
 
 
 impl SVNAddress {
-    fn update(&mut self) {
-        self.new = convert_address(&self.old);
-        update_clipboard(self.new.to_owned());
+    fn new() -> SVNAddress {
+        SVNAddress {
+            old: "".to_string(),
+            new_addr: vec!["".to_string()],
+            new_addr_display: "".to_string(),
+            name: "t".to_string(),
+        }
     }
+    fn update(&mut self) {
+        self.new_addr.clear();
+        let srcs = extract_substrings_containing_base_url(self.old.as_str());
+        if srcs.is_empty() || !srcs.first().unwrap().starts_with("http") {
+            self.new_addr.push("格式错误".to_owned());
+        }
+        for x in srcs {
+            self.new_addr.push(convert_address(&x));
+        }
+        self.new_addr_display = self.new_addr.join("\n");
+        update_clipboard(self.new_addr_display.to_owned());
+    }
+}
+
+
+fn extract_substrings_containing_base_url(input_str: &str) -> Vec<String> {
+    input_str
+        .split_whitespace()
+        .filter(|s| s.contains(BASE_URL))
+        .map(|s| s.to_string())
+        .collect()
 }
 
 fn update_clipboard(content: String) {
@@ -34,12 +66,8 @@ fn update_clipboard(content: String) {
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())
         .title("小工具")
-        .window_size((400.0, 400.0));
-    let initial_state: SVNAddress = SVNAddress {
-        old: "".to_string(),
-        new: "".to_string(),
-        name: "t".to_string(),
-    };
+        .window_size((1200.0, 400.0));
+    let initial_state = SVNAddress::new();
 
     AppLauncher::with_window(main_window)
         .log_to_console()
@@ -48,10 +76,9 @@ fn main() {
 }
 
 fn convert_address(src: &String) -> String {
-    let header = "http://172.17.102.22:18080/svn/softwarerepo";
     let mut ret;
-    if src.contains(header) {
-        ret = src.replace(header, "softwarerepo:").trim_end_matches(|c| c == '/' || c == ' ').to_string();
+    if src.contains(BASE_URL) {
+        ret = src.replace(BASE_URL, "softwarerepo:").trim_end_matches(|c| c == '/' || c == ' ').to_string();
         ret = format!("[{}]", ret);
     } else {
         ret = "格式错误".to_owned()
@@ -66,14 +93,6 @@ struct AppState {
 
 
 fn build_root_widget() -> impl Widget<SVNAddress> {
-    // let new_text = Label::new(|data: &SVNAddress, _env: &Env| {
-    //     if data.old.is_empty() {
-    //         "Hello anybody!?".to_string()
-    //     } else {
-    //         convert_address(&data.old)
-    //     }
-    // });
-
     let label_svn = Label::new("SVN 地址转换：");
 
     let textbox = TextBox::multiline()
@@ -84,14 +103,14 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     let textbox_out = TextBox::multiline()
         .with_placeholder("目标地址")
         .expand_width()
-        .lens(SVNAddress::new);
+        .lens(SVNAddress::new_addr_display);
 
     let button1 = Button::<SVNAddress>::new("转换").on_click(|_ctx, _data, _env| _data.update());
     let btn_open_url = Button::<SVNAddress>::new("打开页面").on_click(|_ctx, _data, _env| {
         let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
         println!("{:?}", ctx.get_contents());
-        ctx.set_contents(_data.new.to_owned()).unwrap();
-        if let Err(e) = open::that("http://172.17.102.22:3343/csvn/repo/editAuthorization?") {
+        ctx.set_contents(_data.new_addr.join("\n")).unwrap();
+        if let Err(e) = open::with("http://172.17.102.22:3343/csvn/repo/editAuthorization?","chrome") {
             eprintln!("Failed to open URL: {}", e);
         }
     });
