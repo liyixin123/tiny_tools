@@ -2,11 +2,13 @@
 
 #![windows_subsystem = "windows"]
 
-use druid::widget::{Flex, Label,  Tabs};
+use druid::widget::{Flex, Label, Tabs};
 use druid::{
     widget::{Button, TextBox},
     AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
 };
+use clipboard::ClipboardProvider;
+use clipboard::ClipboardContext;
 
 #[derive(Debug, Data, Clone, Lens)]
 struct SVNAddress {
@@ -15,10 +17,18 @@ struct SVNAddress {
     name: String,
 }
 
+
 impl SVNAddress {
     fn update(&mut self) {
         self.new = convert_address(&self.old);
+        update_clipboard(self.new.to_owned());
     }
+}
+
+fn update_clipboard(content: String) {
+    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+    println!("{:?}", ctx.get_contents());
+    ctx.set_contents(content).unwrap();
 }
 
 fn main() {
@@ -26,9 +36,9 @@ fn main() {
         .title("小工具")
         .window_size((400.0, 400.0));
     let initial_state: SVNAddress = SVNAddress {
-        old: "".into(),
-        new: "".into(),
-        name: "t".into(),
+        old: "".to_string(),
+        new: "".to_string(),
+        name: "t".to_string(),
     };
 
     AppLauncher::with_window(main_window)
@@ -54,6 +64,7 @@ struct AppState {
     name: String,
 }
 
+
 fn build_root_widget() -> impl Widget<SVNAddress> {
     // let new_text = Label::new(|data: &SVNAddress, _env: &Env| {
     //     if data.old.is_empty() {
@@ -76,7 +87,14 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         .lens(SVNAddress::new);
 
     let button1 = Button::<SVNAddress>::new("转换").on_click(|_ctx, _data, _env| _data.update());
-
+    let btn_open_url = Button::<SVNAddress>::new("打开页面").on_click(|_ctx, _data, _env| {
+        let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+        println!("{:?}", ctx.get_contents());
+        ctx.set_contents(_data.new.to_owned()).unwrap();
+        if let Err(e) = open::that("http://172.17.102.22:3343/csvn/repo/editAuthorization?") {
+            eprintln!("Failed to open URL: {}", e);
+        }
+    });
     let svn_column = Flex::column()
         .with_child(label_svn)
         .with_flex_child(textbox_out, 1.0)
@@ -84,6 +102,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         .with_flex_child(textbox, 1.0)
         .with_default_spacer()
         .with_child(button1)
+        .with_child(btn_open_url)
         .align_vertical(druid::UnitPoint::CENTER);
 
     let tabs = Tabs::new()
