@@ -4,14 +4,19 @@
 
 mod tests;
 
-use druid::widget::{Checkbox, CrossAxisAlignment, Flex, FlexParams, Label, ListIter, Tabs};
-use druid::{widget::{Button, TextBox}, AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc, Application};
+use druid::widget::{Checkbox, CrossAxisAlignment, Flex, FlexParams, Label, ListIter, SizedBox, Tabs};
+use druid::{widget::{Button, TextBox}, AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc, Application, Env};
 
 use druid::im::Vector;
 use tracing::info;
 use std::fmt::Write;
+use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote};
+use subversion_edge_modify_tool::permissions::Permissions;
+use subversion_edge_modify_tool::start_init::get_backups_dir;
 
 const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
+const BAD_FORMAT_STR: &str = "格式错误";
+const BUTTON_WIDTH: f64 = 150.0;
 
 #[derive(Clone, Data, Lens)]
 struct TextBoxData {
@@ -42,6 +47,8 @@ struct SVNAddress {
     new_addrs: Vector<TextBoxData>,
     name: String,
     read_write: bool,
+    backup_path: String,
+    message: String,
 }
 
 
@@ -52,16 +59,27 @@ impl SVNAddress {
             new_addrs: Vector::new(),
             name: String::new(),
             read_write: true,
+            backup_path: {
+                let path = get_backups_dir().unwrap();
+                path.to_str().unwrap().to_string()
+            },
+            message: "".to_string(),
         }
     }
     fn update(&mut self) {
+        if self.name.is_empty() {
+            self.message = "请输入用户名".to_string();
+            return;
+        }
+
         self.new_addrs.clear();
         let srcs = extract_substrings_containing_base_url(self.old.as_str());
         if srcs.is_empty() || !srcs.first().unwrap().starts_with("http") {
             self.new_addrs.push_back(
                 TextBoxData {
-                    text: "格式错误".to_string()
+                    text: BAD_FORMAT_STR.to_string()
                 });
+            self.message = BAD_FORMAT_STR.to_string();
         }
 
         for x in srcs {
@@ -78,6 +96,32 @@ impl SVNAddress {
         }
         builder
     }
+    fn generate_permissions(&mut self) -> Option<Vec<Permissions>> {
+        let mut result = Vec::new();
+        for addr in &self.new_addrs {
+            if &addr.text == BAD_FORMAT_STR || addr.text.is_empty() {
+                self.message = "权限生成失败".to_string();
+                return None;
+            }
+            let repo = &addr.text;
+            let user = &self.name;
+            let auth = if self.read_write { "rw" } else { "r" };
+            let permission = Permissions::new(repo, user, auth);
+            result.push(permission);
+        }
+
+        Some(result)
+    }
+    async fn apply_to_local(&mut self) {
+        if let Some(permissions) = self.generate_permissions() {
+            modify_auths_local(&permissions).await;
+        }
+    }
+    async fn apply_to_remote(&mut self) {
+        if let Some(permissions) = self.generate_permissions() {
+            modify_auths_remote(&permissions).await;
+        }
+    }
 }
 
 
@@ -93,7 +137,7 @@ fn extract_substrings_containing_base_url(input_str: &str) -> Vec<String> {
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())
         .title("小工具")
-        .window_size((1200.0, 400.0));
+        .window_size((1200.0, 800.0));
     let initial_state = SVNAddress::new();
 
     AppLauncher::with_window(main_window)
@@ -108,19 +152,35 @@ fn convert_address(src: &String) -> String {
         ret = src.replace(BASE_URL, "softwarerepo:").trim_end_matches(|c| c == '/' || c == ' ').to_string();
         ret = format!("[{}]", ret);
     } else {
-        ret = "格式错误".to_owned()
+        ret = BAD_FORMAT_STR.to_owned()
     }
     ret
 }
 
+fn open_folder(path: &str) -> Result<(), std::io::Error> {
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("explorer").arg(path).spawn()?;
+    }
+    Ok(())
+}
 
 fn build_root_widget() -> impl Widget<SVNAddress> {
-    let label_svn = Label::new("点击文本框复制内容...");
+    let label_svn = Label::new(|data: &SVNAddress, _env: &Env| {
+        if data.message.is_empty() {
+            "点击文本框复制".to_string()
+        } else {
+            data.message.clone()
+        }
+    })
+        .with_text_color(druid::Color::rgb8(0, 0xff, 0))
+        .with_text_size(32.0);
 
     let textbox = TextBox::multiline()
         .with_placeholder("原始地址")
         .expand_width()
-        .lens(SVNAddress::old);
+        .lens(SVNAddress::old)
+        .expand_height();
     let textbox_name = TextBox::new()
         .with_placeholder("用户名")
         .lens(SVNAddress::name);
@@ -138,57 +198,83 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
                                 clipboard.put_string(&data.text);
                             }
                     )
-            }),
+            })
+            ,
             1.0,
-        );
-    let btn_process = Button::<SVNAddress>::new("转换").on_click(|_ctx, _data, _env| _data.update());
-    let btn_open_url = Button::<SVNAddress>::new("打开页面").on_click(|_ctx, _data, _env| {
-        if let Err(e) = open::with("http://172.17.102.22:3343/csvn/repo/editAuthorization?", "chrome") {
-            eprintln!("Failed to open URL: {}", e);
-        }
-    });
-    let btn_save_local = Button::<SVNAddress>::new("保存到桌面")
-        .on_click(|_ctx, _data, _env| {
-            let log = _data.merged_new_addr();
-            info!("{}",log);
-        });
+        ).expand_height();
 
+    let btn_process = Button::<SVNAddress>::new("转换")
+        .fix_width(BUTTON_WIDTH)
+        .on_click(|_ctx, _data, _env| {
+            _data.update();
+            _ctx.request_paint();
+        });
+    let btn_open_url = Button::<SVNAddress>::new("打开网页")
+        .fix_width(BUTTON_WIDTH)
+        .on_click(|_ctx, _data, _env| {
+            if let Err(e) = open::with("http://172.17.102.22:3343/csvn/repo/editAuthorization?", "chrome") {
+                eprintln!("Failed to open URL: {}", e);
+            }
+        });
+    let btn_save_local = Button::<SVNAddress>::new("保存本地")
+        .fix_width(BUTTON_WIDTH)
+        .disabled_if(|data, _| data.name.is_empty() || data.old.is_empty() || data.new_addrs.is_empty() || data.message == BAD_FORMAT_STR)
+        .on_click(|_ctx, data, _env| {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(data.apply_to_local());
+            data.message = "权限生成成功,打开备份查看".to_string();
+        });
+    let btn_open_backup = Button::<SVNAddress>::new("查看备份")
+        .fix_width(BUTTON_WIDTH)
+        .on_click(|_, data, _| {
+            open_folder(data.backup_path.as_str()).unwrap();
+        });
     let btn_apply_to_remote = Button::<SVNAddress>::new("应用到服务器")
-        .on_click(|_ctx, _data, _env| {
-            let log = _data.merged_new_addr();
-            info!("{}",log);
+        .fix_width(BUTTON_WIDTH)
+        .disabled_if(|data, _| data.name.is_empty() || data.old.is_empty() || data.new_addrs.is_empty() || data.message == BAD_FORMAT_STR)
+        .on_click(|_ctx, data, _env| {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(data.apply_to_remote());
+            data.message = "权限生成成功".to_string();
         });
-    let svn_column = Flex::column()
-        .with_child(label_svn)
-        .with_flex_child(textbox_out, 1.0)
-        .with_default_spacer()
-        .with_flex_child(textbox, 1.0)
-        .with_default_spacer()
-        .with_child(
-            Flex::row()
-                .with_child(textbox_name)
-                .with_default_spacer()
-                .with_child(Checkbox::new("读写").lens(SVNAddress::read_write))
-                .with_default_spacer()
-                .with_child(btn_process)
-        )
-        .with_default_spacer()
-        .with_default_spacer()
-        .with_child(btn_apply_to_remote)
-        .with_flex_child(
-            Flex::row()
-                .cross_axis_alignment(CrossAxisAlignment::End)
-                .with_child(btn_open_url)
-                .with_child(btn_save_local),
-            FlexParams::new(1.0, CrossAxisAlignment::End),
-        )
-        .align_vertical(druid::UnitPoint::CENTER);
+    let checkbox_read_write = Checkbox::new("读写").lens(SVNAddress::read_write);
+    let mut col = Flex::column()
+        .with_flex_child(label_svn, 1.0);
 
+
+    col.add_flex_child(textbox, 3.0);
+
+    col.add_flex_child(textbox_name.center(), 1.0);
+    col.add_flex_child(checkbox_read_write.center(), 1.0);
+    col.add_flex_child(btn_process, 1.0);
+    col.add_flex_child(btn_open_url.align_right(), 1.0);
+    col.add_flex_child(btn_save_local.align_right(), 1.0);
+    col.add_flex_child(btn_open_backup.align_right(), 1.0);
+
+
+    // .with_default_spacer()
+    // .with_flex_child(
+    //     Flex::row()
+    //         .cross_axis_alignment(CrossAxisAlignment::End)
+    //         .with_child(btn_open_url)
+    //         .with_child(btn_save_local),
+    //     FlexParams::new(1.0, CrossAxisAlignment::End),
+    // )
+    // .with_default_spacer()
+
+    col.add_flex_child(btn_apply_to_remote, 1.0);
+    col.add_flex_child(textbox_out, 5.0);
+    // .with_default_spacer()
+    // .with_flex_child(btn_apply_to_remote, 1.0);
+    // .align_vertical(druid::UnitPoint::CENTER);
+
+    col.set_cross_axis_alignment(CrossAxisAlignment::Center);
 
     let tabs = Tabs::new()
-        .with_tab("SVN地址转换", svn_column)
+        .with_tab("SVN地址转换", col)
         .with_tab("Proxy", Label::new("Proxy settings"));
 
-    Flex::row()
+    Flex::column()
         .with_flex_child(tabs, 1.0)
+    // .debug_paint_layout()
 }

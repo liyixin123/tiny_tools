@@ -1,6 +1,6 @@
 [package]
 name = "tiny_tools"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,4 +10,5 @@ druid = { git = "https://github.com/linebender/druid.git", features = ["im"]}
 #instant = { version = "0.1.6", features = ["wasm-bindgen"] }
 tracing = { version = "0.1.22" }
 open = "3"
-clipboard = "0.5.0"
+tokio = {version = "1"}
+subversion_edge_modify_tool = { path = "../subversion_edge_modify_tool" }

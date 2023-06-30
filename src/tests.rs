@@ -33,6 +33,15 @@ http://172.17.102.21:18080/svn/commondistrepo/software/auxiliary/json_util 续�
 "http://172.17.102.22:18080/svn/softwarerepo/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components/rpc_client/tunnel_spec_vision_node"
         ];
         assert_eq!(output3, expected_output3);
-
+        // http://172.17.102.22:18080/svn/softwarerepo/products/rail_transport/monitor/twds/1.x/doc/trunk 读写
+        //     http://172.17.102.22:18080/svn/softwarerepo/products/rail_transport/monitor/twds/1.x/software/trunk 只读
+        //     http://172.17.102.22:18080/svn/softwarerepo/products/rail_transport/monitor/twds/1.x/software/trunk/applications/debugger 读写
+    }
+    #[test]
+    fn test_temp(){
+        let str = "格式错误";
+        let str2 = str.to_string();
+        let res = str == str2;
+        assert!(res);
     }
 }
