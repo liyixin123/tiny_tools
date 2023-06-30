@@ -4,11 +4,10 @@
 
 mod tests;
 
-use druid::widget::{Checkbox, CrossAxisAlignment, Flex, FlexParams, Label, ListIter, SizedBox, Tabs};
+use druid::widget::{Checkbox, CrossAxisAlignment, Flex,  Label, ListIter,  Tabs};
 use druid::{widget::{Button, TextBox}, AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc, Application, Env};
 
 use druid::im::Vector;
-use tracing::info;
 use std::fmt::Write;
 use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote};
 use subversion_edge_modify_tool::permissions::Permissions;
@@ -86,6 +85,7 @@ impl SVNAddress {
             self.new_addrs.push_back(TextBoxData { text: convert_address(&x) });
         }
     }
+    #[allow(dead_code)]
     fn merged_new_addr(&self) -> String {
         let mut builder = String::new();
         for textbox in &self.new_addrs {
