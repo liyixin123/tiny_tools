@@ -26,6 +26,7 @@ lazy_static! {
     static ref REGEXES:Vec<Regex> =
         vec![
             Regex::new(r"（.*?$").unwrap(),
+            Regex::new(r"\(.*?$").unwrap(),
             Regex::new(r"、.*?$").unwrap(),
         ];
 }

@@ -100,5 +100,8 @@ http://172.17.102.21:18080/svn/commondistrepo/software/auxiliary/json_util 续�
         let src = String::from("http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/trunk/function/restful、只读");
         let dst = convert_address(src);
         assert_eq!("[softwarerepo:/platform/1.x/trunk/function/restful]", dst);
+        let src = String::from("http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/trunk/commonheaders(只读)");
+        let dst = convert_address(src);
+        assert_eq!("[softwarerepo:/platform/1.x/trunk/commonheaders]", dst);
     }
 }
