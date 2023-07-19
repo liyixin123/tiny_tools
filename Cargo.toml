@@ -6,12 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-druid = { git = "https://github.com/linebender/druid.git", features = ["im"]}
+druid = { git = "https://github.com/linebender/druid.git", features = ["im"] }
 #instant = { version = "0.1.6", features = ["wasm-bindgen"] }
 tracing = { version = "0.1.22" }
 open = "4.2"
-tokio = {version = "1"}
+tokio = { version = "1" }
 prettydiff = "0.6"
 lazy_static = "1.4"
 regex = "1.8"
+serde = { version = "1.0", features = ["derive"] }
+reqwest = { version = "0.11", features = ["blocking", "multipart"] }
+
 subversion_edge_modify_tool = { path = "../subversion_edge_modify_tool" }
