@@ -3,6 +3,7 @@
 #![windows_subsystem = "windows"]
 
 mod tests;
+mod pic_uploader;
 
 use druid::im::Vector;
 use druid::widget::{Checkbox, CrossAxisAlignment, Flex, Label, ListIter, Tabs};
@@ -22,12 +23,14 @@ const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
 const BAD_FORMAT_STR: &str = "格式错误";
 const BUTTON_WIDTH: f64 = 150.0;
 lazy_static! {
-    static ref SEPARATOR:Mutex<Vec<char>> = Mutex::new(vec!['/', ' ']);
+    static ref SEPARATOR:Mutex<Vec<char>> = Mutex::new(vec!['/', ' ',]);
     static ref REGEXES:Vec<Regex> =
         vec![
             Regex::new(r"（.*?$").unwrap(),
             Regex::new(r"\(.*?$").unwrap(),
             Regex::new(r"、.*?$").unwrap(),
+            Regex::new(r"，.*?$").unwrap(),
+            Regex::new(r",.*?$").unwrap(),
         ];
 }
 
@@ -214,6 +217,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     let textbox_name = TextBox::new()
         .with_placeholder("用户名")
         .lens(SVNAddress::name);
+    // let name_list = COm
 
     let textbox_out = Flex::column()
         .with_flex_child(
@@ -281,31 +285,21 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     let mut col = Flex::column().with_flex_child(label_svn, 1.0);
 
     col.add_flex_child(textbox, 3.0);
-
     col.add_flex_child(textbox_name.center(), 1.0);
     col.add_flex_child(checkbox_read_write.center(), 1.0);
     col.add_flex_child(btn_process, 1.0);
     col.add_flex_child(btn_open_url.align_right(), 1.0);
     col.add_flex_child(btn_save_local.align_right(), 1.0);
     col.add_flex_child(btn_open_backup.align_right(), 1.0);
-
-    // .with_default_spacer()
-    // .with_flex_child(
-    //     Flex::row()
-    //         .cross_axis_alignment(CrossAxisAlignment::End)
-    //         .with_child(btn_open_url)
-    //         .with_child(btn_save_local),
-    //     FlexParams::new(1.0, CrossAxisAlignment::End),
-    // )
-    // .with_default_spacer()
-
     col.add_flex_child(btn_apply_to_remote, 1.0);
     col.add_flex_child(textbox_out, 5.0);
-    // .with_default_spacer()
-    // .with_flex_child(btn_apply_to_remote, 1.0);
-    // .align_vertical(druid::UnitPoint::CENTER);
-
     col.set_cross_axis_alignment(CrossAxisAlignment::Center);
+
+    /// 图床
+    // let mut col_pic = Flex::column().with_flex_child(Label::new("Pic go 图床"), 1.0);
+
+
+    ///
 
     let tabs = Tabs::new()
         .with_tab("SVN地址转换", col)
