@@ -1,13 +1,9 @@
 #[cfg(test)]
 mod tests {
     use std::fs;
-    use std::fs::File;
-    use std::io::Read;
-    use druid::WidgetExt;
-    use crate::{convert_address, extract_substrings_containing_base_url};
-    use prettydiff::{diff_lines, diff_slice};
+    use crate::{convert_address, extract_permissions, extract_substrings_containing_base_url,extract_name};
+    use prettydiff::{ diff_slice};
     use prettydiff::basic::DiffOp;
-    use tokio::io::AsyncBufReadExt;
 
 
     #[test]
@@ -103,5 +99,29 @@ http://172.17.102.21:18080/svn/commondistrepo/software/auxiliary/json_util 续�
         let src = String::from("http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/trunk/commonheaders(只读)");
         let dst = convert_address(src);
         assert_eq!("[softwarerepo:/platform/1.x/trunk/commonheaders]", dst);
+    }
+
+    #[test]
+    fn test_extract_permissions() {
+        let str1 = "http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/branch/1.11.0-beta-360_2023-11-29/function/robot 只读";
+        assert_eq!(extract_permissions(str1), Some("只读".to_string()));
+        let str1 = "http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/branch/1.11.0-beta-360_2023-11-29/function/robot、读写";
+        assert_eq!(extract_permissions(str1), Some("读写".to_string()));
+
+        let str3 = r##"SVN账号名称
+lizhang
+注明申请路径、访问权限（只读\读写\禁止访问）
+申请路径、访问权限
+http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/branch/1.11.0-beta-360_2023-11-29/function/robot 读写"##;
+        assert_eq!(extract_permissions(str3), Some("读写".to_string()));
+    }
+    #[test]
+    fn test_extract_account_name() {
+        let str3 = r"SVN账号名称
+lizhang
+注明申请路径、访问权限（只读\读写\禁止访问）
+申请路径、访问权限
+http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/branch/1.11.0-beta-360_2023-11-29/function/robot 读写";
+        assert_eq!(extract_name(str3), Some("lizhang".to_string()));
     }
 }

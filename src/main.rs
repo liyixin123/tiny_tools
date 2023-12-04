@@ -17,7 +17,7 @@ use std::fmt::Write;
 use std::sync::Mutex;
 use subversion_edge_modify_tool::permissions::Permissions;
 use subversion_edge_modify_tool::start_init::get_backups_dir;
-use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote};
+use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote };
 
 const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
 const BAD_FORMAT_STR: &str = "格式错误";
@@ -85,21 +85,36 @@ impl SVNAddress {
         }
     }
     fn update(&mut self) {
+        if let Some(name) = extract_name(self.old.as_str()) {
+            self.name = name;
+        }
         if self.name.is_empty() {
             self.message = "请输入用户名".to_string();
             return;
         }
 
         self.new_addrs.clear();
-        let srcs = extract_substrings_containing_base_url(self.old.as_str());
-        if srcs.is_empty() || !srcs.first().unwrap().starts_with("http") {
+        let url_list = extract_substrings_containing_base_url(self.old.as_str());
+        // 提取名字
+
+
+        // 获取权限
+        if let Some(permissions) = extract_permissions(self.old.as_str()) {
+            if permissions == "只读" {
+                self.read_write = false;
+            } else if permissions == "读写" {
+                self.read_write = true;
+            }
+        }
+
+        if url_list.is_empty() || !url_list.first().unwrap().starts_with("http") {
             self.new_addrs.push_back(TextBoxData {
                 text: BAD_FORMAT_STR.to_string(),
             });
             self.message = BAD_FORMAT_STR.to_string();
         }
 
-        for x in srcs {
+        for x in url_list {
             self.new_addrs.push_back(TextBoxData {
                 text: convert_address(x),
             });
@@ -152,6 +167,25 @@ fn extract_substrings_containing_base_url(input_str: &str) -> Vec<String> {
         .collect()
 }
 
+fn extract_name(input_str: &str) -> Option<String> {
+    let account_name_re = Regex::new(r"SVN账号名称\r?\n(.+?)(?:\r?\n|\r?$)").unwrap();
+    let account_name = account_name_re
+        .captures(input_str)
+        .and_then(|cap| cap.get(1).map(|m| m.as_str().trim().to_string()));
+    account_name
+}
+
+fn extract_permissions(input_str: &str) -> Option<String> {
+    let re = Regex::new(r"(只读|读写)").unwrap();
+    let permission = input_str
+        .lines()
+        .rev()  // 从末尾开始查找
+        .find(|line| re.is_match(line))
+        .map(|m| re.find(m).unwrap().as_str().trim().to_string());
+
+    permission
+}
+
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())
         .title("小工具")
@@ -169,7 +203,7 @@ fn is_separator(c: char) -> bool {
 }
 
 fn replace_str(src: String) -> String {
-    let  ret = src
+    let ret = src
         .replace(BASE_URL, "softwarerepo:")
         .trim_end_matches(|c| is_separator(c))
         .to_string();
