@@ -17,7 +17,7 @@ use std::fmt::Write;
 use std::sync::Mutex;
 use subversion_edge_modify_tool::permissions::Permissions;
 use subversion_edge_modify_tool::start_init::get_backups_dir;
-use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote };
+use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote};
 
 const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
 const BAD_FORMAT_STR: &str = "格式错误";
@@ -102,7 +102,8 @@ impl SVNAddress {
         if let Some(permissions) = extract_permissions(self.old.as_str()) {
             if permissions == "只读" {
                 self.read_write = false;
-            } else if permissions == "读写" {
+            } else {
+                // } else if permissions.contains("写"){
                 self.read_write = true;
             }
         }
@@ -176,7 +177,7 @@ fn extract_name(input_str: &str) -> Option<String> {
 }
 
 fn extract_permissions(input_str: &str) -> Option<String> {
-    let re = Regex::new(r"(只读|读写)").unwrap();
+    let re = Regex::new(r"(只读|读|读写|写)").unwrap();
     let permission = input_str
         .lines()
         .rev()  // 从末尾开始查找
