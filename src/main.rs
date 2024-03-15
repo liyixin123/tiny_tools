@@ -113,6 +113,8 @@ impl SVNAddress {
                 text: BAD_FORMAT_STR.to_string(),
             });
             self.message = BAD_FORMAT_STR.to_string();
+        } else { 
+            self.message = "路径转化成功".to_string();
         }
 
         for x in url_list {
@@ -138,6 +140,8 @@ impl SVNAddress {
             if &addr.text == BAD_FORMAT_STR || addr.text.is_empty() {
                 self.message = "权限生成失败".to_string();
                 return None;
+            } else{
+                self.message = "权限转化成功".to_string();
             }
             let repo = &addr.text;
             let user = &self.name;
@@ -313,6 +317,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         })
         .on_click(|_ctx, data, _env| {
             let rt = tokio::runtime::Runtime::new().unwrap();
+            data.message = "正在修改权限...".to_string();
             rt.block_on(data.apply_to_remote());
             data.message = "权限生成成功".to_string();
         });
