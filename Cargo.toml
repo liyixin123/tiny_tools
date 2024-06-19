@@ -9,13 +9,13 @@ edition = "2021"
 druid = { git = "https://github.com/linebender/druid.git", features = ["im"] }
 #instant = { version = "0.1.6", features = ["wasm-bindgen"] }
 tracing = { version = "0.1.22" }
-open = "4.2"
+open = "5.1"
 tokio = { version = "1" }
-prettydiff = "0.6"
+prettydiff = "0.7"
 lazy_static = "1.4"
 regex = "1.8"
 serde = { version = "1.0", features = ["derive"] }
-reqwest = { version = "0.11", features = ["blocking", "multipart"] }
+reqwest = { version = "0.12", features = ["blocking", "multipart"] }
 dirs = "5.0"
 anyhow = "1.0.86"
 subversion_edge_modify_tool = { path = "../subversion_edge_modify_tool" }
