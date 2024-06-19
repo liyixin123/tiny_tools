@@ -2,14 +2,15 @@
 
 #![windows_subsystem = "windows"]
 
-mod tests;
 mod pic_uploader;
+mod tests;
 
+use anyhow::Result;
 use druid::im::Vector;
 use druid::widget::{Checkbox, CrossAxisAlignment, Flex, Label, ListIter, Tabs};
 use druid::{
     widget::{Button, TextBox},
-    AppLauncher, Application, Data, Env, Lens, Widget, WidgetExt, WindowDesc,
+    AppLauncher, Application, Color, Data, Env,  Lens, Widget, WidgetExt, WindowDesc,
 };
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -23,15 +24,14 @@ const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
 const BAD_FORMAT_STR: &str = "格式错误";
 const BUTTON_WIDTH: f64 = 150.0;
 lazy_static! {
-    static ref SEPARATOR:Mutex<Vec<char>> = Mutex::new(vec!['/', ' ',]);
-    static ref REGEXES:Vec<Regex> =
-        vec![
-            Regex::new(r"（.*?$").unwrap(),
-            Regex::new(r"\(.*?$").unwrap(),
-            Regex::new(r"、.*?$").unwrap(),
-            Regex::new(r"，.*?$").unwrap(),
-            Regex::new(r",.*?$").unwrap(),
-        ];
+    static ref SEPARATOR: Mutex<Vec<char>> = Mutex::new(vec!['/', ' ',]);
+    static ref REGEXES: Vec<Regex> = vec![
+        Regex::new(r"（.*?$").unwrap(),
+        Regex::new(r"\(.*?$").unwrap(),
+        Regex::new(r"、.*?$").unwrap(),
+        Regex::new(r"，.*?$").unwrap(),
+        Regex::new(r",.*?$").unwrap(),
+    ];
 }
 
 #[derive(Clone, Data, Lens)]
@@ -60,6 +60,12 @@ impl ListIter<TextBoxData> for SVNAddress {
     }
 }
 
+#[derive(Clone, Copy)]
+enum MessageType {
+    Info,
+    Error,
+}
+
 #[derive(Data, Clone, Lens)]
 struct SVNAddress {
     old: String,
@@ -68,6 +74,7 @@ struct SVNAddress {
     read_write: bool,
     backup_path: String,
     message: String,
+    message_color: druid::Color,
 }
 
 impl SVNAddress {
@@ -82,6 +89,7 @@ impl SVNAddress {
                 path.to_str().unwrap().to_string()
             },
             message: "".to_string(),
+            message_color: Color::GREEN,
         }
     }
     fn update(&mut self) {
@@ -89,14 +97,20 @@ impl SVNAddress {
             self.name = name;
         }
         if self.name.is_empty() {
-            self.message = "请输入用户名".to_string();
+            self.set_message("请输入用户名".to_string(), MessageType::Info);
             return;
         }
 
         self.new_addrs.clear();
-        let url_list = extract_substrings_containing_base_url(self.old.as_str());
+        let url_list = match extract_substrings_containing_base_url(self.old.as_str()) {
+            Ok(urls) => urls,
+            Err(e) => {
+                let err = format!("Error:{}", e);
+                self.set_message(err, MessageType::Error);
+                return;
+            }
+        };
         // 提取名字
-
 
         // 获取权限
         if let Some(permissions) = extract_permissions(self.old.as_str()) {
@@ -112,9 +126,9 @@ impl SVNAddress {
             self.new_addrs.push_back(TextBoxData {
                 text: BAD_FORMAT_STR.to_string(),
             });
-            self.message = BAD_FORMAT_STR.to_string();
-        } else { 
-            self.message = "路径转化成功".to_string();
+            self.set_message(BAD_FORMAT_STR.to_string(), MessageType::Error);
+        } else {
+            self.set_message("路径转化成功".to_string(), MessageType::Info);
         }
 
         for x in url_list {
@@ -134,14 +148,24 @@ impl SVNAddress {
         }
         builder
     }
+    fn set_message(&mut self, message: String, message_type: MessageType) {
+        self.message = message;
+        match message_type {
+            MessageType::Info => self.message_color = druid::Color::GREEN, // 绿色
+            MessageType::Error => self.message_color = druid::Color::RED,  // 红色
+        }
+    }
     fn generate_permissions(&mut self) -> Option<Vec<Permissions>> {
         let mut result = Vec::new();
-        for addr in &self.new_addrs {
+        let new_addrs = self.new_addrs.clone();
+        for addr in &new_addrs {
             if &addr.text == BAD_FORMAT_STR || addr.text.is_empty() {
-                self.message = "权限生成失败".to_string();
+                self.set_message("权限生成失败".to_string(), MessageType::Error);
                 return None;
-            } else{
-                self.message = "权限转化成功".to_string();
+            } else {
+                let message = "权限转化成功".to_string();
+                let message_type = MessageType::Info;
+                self.set_message(message, message_type);
             }
             let repo = &addr.text;
             let user = &self.name;
@@ -164,12 +188,17 @@ impl SVNAddress {
     }
 }
 
-fn extract_substrings_containing_base_url(input_str: &str) -> Vec<String> {
-    input_str
+fn extract_substrings_containing_base_url(input_str: &str) -> Result<Vec<String>> {
+    let result: Vec<String> = input_str
         .split_whitespace()
         .filter(|s| s.contains(BASE_URL))
         .map(|s| s.to_string())
-        .collect()
+        .collect();
+    if result.is_empty() {
+        Err(anyhow::anyhow!("URL格式不符合要求：{} ...", BASE_URL))
+    } else {
+        Ok(result)
+    }
 }
 
 fn extract_name(input_str: &str) -> Option<String> {
@@ -184,7 +213,7 @@ fn extract_permissions(input_str: &str) -> Option<String> {
     let re = Regex::new(r"(只读|读|读写|写)").unwrap();
     let permission = input_str
         .lines()
-        .rev()  // 从末尾开始查找
+        .rev() // 从末尾开始查找
         .find(|line| re.is_match(line))
         .map(|m| re.find(m).unwrap().as_str().trim().to_string());
 
@@ -213,9 +242,9 @@ fn replace_str(src: String) -> String {
         .trim_end_matches(|c| is_separator(c))
         .to_string();
 
-    REGEXES.iter().fold(ret, |acc, regex| {
-        regex.replace_all(&acc, "").to_string()
-    })
+    REGEXES
+        .iter()
+        .fold(ret, |acc, regex| regex.replace_all(&acc, "").to_string())
 }
 
 fn convert_address(src: String) -> String {
@@ -238,15 +267,15 @@ fn open_folder(path: &str) -> Result<(), std::io::Error> {
 }
 
 fn build_root_widget() -> impl Widget<SVNAddress> {
-    let label_svn = Label::new(|data: &SVNAddress, _env: &Env| {
+    let label_svn = Label::dynamic(|data: &SVNAddress, _env: &Env| {
         if data.message.is_empty() {
-            "点击文本框复制".to_string()
+            "输入原始地址，点击结果框可直接复制".to_string()
         } else {
             data.message.clone()
         }
     })
-        .with_text_color(druid::Color::rgb8(0, 0xff, 0))
-        .with_text_size(32.0);
+    .with_text_size(32.0)
+    .env_scope(|env, data| env.set(druid::theme::TEXT_COLOR, data.message_color.clone()));
 
     let textbox = TextBox::multiline()
         .with_placeholder("原始地址")
@@ -300,7 +329,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         .on_click(|_ctx, data, _env| {
             let rt = tokio::runtime::Runtime::new().unwrap();
             rt.block_on(data.apply_to_local());
-            data.message = "权限生成成功,打开备份查看".to_string();
+            data.set_message("权限生成成功,打开备份查看".to_string(), MessageType::Info);
         });
     let btn_open_backup = Button::<SVNAddress>::new("查看备份")
         .fix_width(BUTTON_WIDTH)
@@ -317,9 +346,9 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         })
         .on_click(|_ctx, data, _env| {
             let rt = tokio::runtime::Runtime::new().unwrap();
-            data.message = "正在修改权限...".to_string();
+            data.set_message("正在修改权限...".to_string(), MessageType::Info);
             rt.block_on(data.apply_to_remote());
-            data.message = "权限生成成功".to_string();
+            data.set_message("权限生成成功".to_string(), MessageType::Info);
         });
     let checkbox_read_write = Checkbox::new("读写").lens(SVNAddress::read_write);
     let mut col = Flex::column().with_flex_child(label_svn, 1.0);
@@ -334,12 +363,6 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     col.add_flex_child(btn_apply_to_remote, 1.0);
     col.add_flex_child(textbox_out, 5.0);
     col.set_cross_axis_alignment(CrossAxisAlignment::Center);
-
-    /// 图床
-    // let mut col_pic = Flex::column().with_flex_child(Label::new("Pic go 图床"), 1.0);
-
-
-    ///
 
     let tabs = Tabs::new()
         .with_tab("SVN地址转换", col)
