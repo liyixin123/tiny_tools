@@ -365,7 +365,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     col.set_cross_axis_alignment(CrossAxisAlignment::Center);
 
     let tabs = Tabs::new()
-        .with_tab("SVN地址转换", col)
+        .with_tab("SVN权限开通", col)
         .with_tab("Proxy", Label::new("Proxy settings"));
 
     Flex::column().with_flex_child(tabs, 1.0)
