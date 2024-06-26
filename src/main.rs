@@ -7,10 +7,11 @@ mod tests;
 
 use anyhow::Result;
 use druid::im::Vector;
+use druid::text::{FontDescriptor, FontFamily};
 use druid::widget::{Checkbox, CrossAxisAlignment, Flex, Label, ListIter, Tabs};
 use druid::{
     widget::{Button, TextBox},
-    AppLauncher, Application, Color, Data, Env,  Lens, Widget, WidgetExt, WindowDesc,
+    AppLauncher, Application, Color, Data, Env, Lens, Widget, WidgetExt, WindowDesc,
 };
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -228,6 +229,14 @@ fn main() {
 
     AppLauncher::with_window(main_window)
         .log_to_console()
+        .configure_env(|env, _| {
+            // Assuming the intention is to set the font if "Fira Code" is not installed
+            if is_font_installed("阿里巴巴普惠体 3.0") {
+                let font = FontDescriptor::new(FontFamily::new_unchecked("阿里巴巴普惠体 3.0"))
+                    .with_size(16.0);
+                env.set(druid::theme::UI_FONT, font);
+            }
+        })
         .launch(initial_state)
         .expect("Failed to launch application");
 }
@@ -265,7 +274,16 @@ fn open_folder(path: &str) -> Result<(), std::io::Error> {
     }
     Ok(())
 }
-
+fn is_font_installed(font_name: &str) -> bool {
+    let source = font_kit::source::SystemSource::new();
+    match source.all_fonts() {
+        Ok(fonts) => fonts.iter().any(|font| match font.load() {
+            Ok(loaded_font) => loaded_font.family_name() == font_name,
+            Err(_) => false,
+        }),
+        Err(_) => false,
+    }
+}
 fn build_root_widget() -> impl Widget<SVNAddress> {
     let label_svn = Label::dynamic(|data: &SVNAddress, _env: &Env| {
         if data.message.is_empty() {
