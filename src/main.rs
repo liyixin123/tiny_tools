@@ -128,8 +128,9 @@ impl SVNAddress {
                 text: BAD_FORMAT_STR.to_string(),
             });
             self.set_message(BAD_FORMAT_STR.to_string(), MessageType::Error);
+            return;
         } else {
-            self.set_message("路径转化成功".to_string(), MessageType::Info);
+            self.set_message("地址检查成功".to_string(), MessageType::Info);
         }
 
         for x in url_list {
@@ -192,8 +193,7 @@ impl SVNAddress {
 fn extract_substrings_containing_base_url(input_str: &str) -> Result<Vec<String>> {
     let result: Vec<String> = input_str
         .split_whitespace()
-        .filter(|s| s.contains(BASE_URL))
-        .map(|s| s.to_string())
+        .filter_map(|s| s.find(BASE_URL).map(|start| s[start..].to_string()))
         .collect();
     if result.is_empty() {
         Err(anyhow::anyhow!("URL格式不符合要求：{} ...", BASE_URL))
