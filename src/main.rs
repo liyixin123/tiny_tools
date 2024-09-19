@@ -71,7 +71,7 @@ enum MessageType {
 struct SVNAddress {
     old: String,
     new_addrs: Vector<TextBoxData>,
-    name: String,
+    names: String,
     read_write: bool,
     backup_path: String,
     message: String,
@@ -83,7 +83,7 @@ impl SVNAddress {
         SVNAddress {
             old: "".to_string(),
             new_addrs: Vector::new(),
-            name: String::new(),
+            names: String::new(),
             read_write: true,
             backup_path: {
                 let path = get_backups_dir().unwrap();
@@ -93,11 +93,15 @@ impl SVNAddress {
             message_color: Color::GREEN,
         }
     }
+    #[allow(dead_code)]
+    fn set_old(&mut self, old:&str){
+        self.old = old.to_string();
+    }
     fn update(&mut self) {
         if let Some(name) = extract_name(self.old.as_str()) {
-            self.name = name;
+            self.names = name;
         }
-        if self.name.is_empty() {
+        if self.names.is_empty() {
             self.set_message("请输入用户名".to_string(), MessageType::Info);
             return;
         }
@@ -157,6 +161,7 @@ impl SVNAddress {
             MessageType::Error => self.message_color = druid::Color::RED,  // 红色
         }
     }
+
     fn generate_permissions(&mut self) -> Option<Vec<Permissions>> {
         let mut result = Vec::new();
         let new_addrs = self.new_addrs.clone();
@@ -170,9 +175,19 @@ impl SVNAddress {
                 self.set_message(message, message_type);
             }
             let repo = &addr.text;
-            let user = &self.name;
             let auth = if self.read_write { "rw" } else { "r" };
-            let permission = Permissions::new(repo, user, auth);
+
+            let names = split_string(&self.names);
+            let mut users = Vec::new();
+            for name in names {
+                let user_auth = subversion_edge_modify_tool::permissions::UserAuth {
+                    user: name.to_string(),
+                    auth: String::from(auth),
+                };
+               users.push(user_auth);
+            }
+            // let permission = Permissions::new(repo, user, auth);
+            let permission = Permissions::new_from_users(repo, users);
             result.push(permission);
         }
 
@@ -211,7 +226,7 @@ fn extract_name(input_str: &str) -> Option<String> {
 }
 
 fn extract_permissions(input_str: &str) -> Option<String> {
-    let re = Regex::new(r"(只读|读|读写|写)").unwrap();
+    let re = Regex::new(r"(只读|读写|读|写)").unwrap();
     let permission = input_str
         .lines()
         .rev() // 从末尾开始查找
@@ -221,6 +236,9 @@ fn extract_permissions(input_str: &str) -> Option<String> {
     permission
 }
 
+fn split_string(input: &str) -> Vec<&str> {
+    input.split([',', '，'].as_ref()).collect()
+}
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())
         .title("小工具")
@@ -297,7 +315,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         .expand_height();
     let textbox_name = TextBox::new()
         .with_placeholder("用户名")
-        .lens(SVNAddress::name);
+        .lens(SVNAddress::names);
     // let name_list = COm
 
     let textbox_out = Flex::column()
@@ -334,7 +352,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     let btn_save_local = Button::<SVNAddress>::new("保存本地")
         .fix_width(BUTTON_WIDTH)
         .disabled_if(|data, _| {
-            data.name.is_empty()
+            data.names.is_empty()
                 || data.old.is_empty()
                 || data.new_addrs.is_empty()
                 || data.message == BAD_FORMAT_STR
@@ -352,7 +370,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     let btn_apply_to_remote = Button::<SVNAddress>::new("应用到服务器")
         .fix_width(BUTTON_WIDTH)
         .disabled_if(|data, _| {
-            data.name.is_empty()
+            data.names.is_empty()
                 || data.old.is_empty()
                 || data.new_addrs.is_empty()
                 || data.message == BAD_FORMAT_STR

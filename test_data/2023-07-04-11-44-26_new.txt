@@ -1,0 +1,1166 @@
+[groups]
+# 软件部团队
+sw_manager=zhuangxun
+sw_leaders=xuhang,wangli,gaowei,fangjiansheng
+sw_app_1=xuhang,zhangguotao,lizhang,wangaiping,tangwei,shangpengpeng,zhangyixiang,lisheng,yuantingzhong,lvxianzhe,zhangmingming,yujunyi,chenhao,sundazheng,gaojiaqi,zhoudongbin,zhanghongyu,shenmengting,zhonghuayan,liuruolin,hanxinqi,lutuo,panhao
+sw_app_2=wangli,chenqi,yanran,liqiang,wangzikui,kuangshui,lizhengnan,fengshuojie,yangbo,kongzhaorui,haoshengli
+sw_app_3=gaowei,makun,liyixin,qiulongyun,xujian,wangrui,shenguoyang,zhangjing,zhangcheng,liuyujie,yangtao,wanhongchang
+sw_infrastructure=fangjiansheng,wanglin,yujinzhu,huangjiangfeng,liubingdong,genghongwei
+sw_group=@sw_manager,@sw_app_1,@sw_app_2,@sw_app_3,@sw_infrastructure
+# 软件部项目组
+
+# 汽车产品线
+# 在线测量
+inline_measure_rw=wangli,jiguoqian,wangzikui,lizhengnan,fengshuojie,liqiang,kuangshui,lizhengnan,zhangjing,wanhongchang,gaowei,wangaiping,lisheng,haoshengli,makun
+fixture_measure_rw=wangli
+# 绝对测量
+abs_measure_rw=wangli,haoshengli
+# 视觉引导
+guide_works_rw=lizhang,wangaiping,zhangyixiang,wenghaiwei,tangwei
+guide_works_r =liqiang,wanglin,wangrui
+guide_works_bestfit_rw=lizhang,tangwei,xuhang,wangaiping,zhangyixiang,wangrui,yujunyi,zhangjing,gaojiaqi,shenguoyang,shenmengting
+guide_works_bestfit_r=liyixin,lvxianzhe,shenmengting
+guide_works_bestfit_doc_rw=zhangmingming,zhanghongyu,zhoudongbin
+guide_works_rackposition_rw=lizhang,zhangyixiang,zhangmingming,tangwei,zhonghuayan,shenmengting,liuruolin,lisheng,sundazheng,panhao
+guide_legacy_rw=liyixin
+# RF引导
+rf_guide_legacy_rw=shenguoyang,wanhongchang
+# 引导查询软件
+guide_viewer_legacy_rw=shenguoyang
+
+# bin-picking
+bin_picking_rw=jiguoqian,wangaiping,fangjiansheng,lizhang,zhangjing,wangrui,yujunyi,zhangyixiang,gaojiaqi
+bin_picking_r=makun,zhangcheng,wanhongchang
+# 涂胶检测
+glue_r=zhangguotao,wenghaiwei,zhangyixiang,lvxianzhe,zhangliyu,gaojiaqi
+glue_4x_rw=zhangguotao,wenghaiwei,zhangyixiang,lvxianzhe,zhangliyu,gaojiaqi,tanfuxiang,panhao
+glue_4x_r=tangwei,xuhang
+glue_3x_rw=zhangguotao,wenghaiwei,zhangliyu,gaojiaqi,tangwei
+aging_glue_rw=zhangguotao,wenghaiwei
+global_glue_inspector_rw=zhangguotao,wenghaiwei,gaojiaqi
+glue_upload_client_rw=zhangguotao,wenghaiwei,tanfuxiang
+# 间隙面差
+im_gapflush_rw=wangli,wangzikui
+production_assist_rw=liqiang,zhengyiming,wangli,kuangshui
+multiscreen_viewer_rw=liqiang,zhengyiming
+handygap_rw=liqiang,zhengyiming,wangli,tangwei,wangrui
+handygap_r=wangrui
+auto_gap_rw=liqiang,zhengyiming,wangli,wangrui,wangzikui,kuangshui
+gap_flush_rw=wangli,wangzikui
+# 焊缝检测
+weld_inspec_rw=liyixin,makun,zhangcheng,wanhongchang
+weld_inspec_2x_rw=liyixin,makun,gaowei,xujian
+# 数据平台
+cloud_rw=xuhang,shangpengpeng,yuantingzhong,chenhao,zhangmingming,hanxinqi
+accu_analyzer_rw=zhoudongbin,zhangliyu,zhouhao,zhanghongyu,sundazheng,sundazheng
+# 蓝光扫描
+sophi_suite_rw=gaowei,makun,wangrui,zhangjing
+sophi_suite_r=qiulongyun,xujian
+sophi_suite_client_rw=qiulongyun
+blue_light_legacy_rw=makun
+# 漆面检测
+specular_vision_rw=gaowei,qiulongyun
+specular_vision_r=shenguoyang,lizhang
+specular_vision_1x_rw=shenguoyang
+tunnel_spec_vision_0x_r=makun,shenguoyang,liuyujie,yangtao,wanhongchang,gaojiaqi,panhao
+
+# 视觉识别
+recognize_rw=wangaiping,tangwei
+# 基础组件
+platform_rw=fangjiansheng
+platform_r=wanglin,yujinzhu
+platform_components_rw=wanglin,yujinzhu
+platform_1x_rw=wanglin,yujinzhu
+platform_0x_rw=lizhang
+platform_0x_r=lizhang
+platform_commonheaders_r=wanglin,yujinzhu,lizhang,huangjiangfeng,liubingdong,genghongwei,zhaoshiji
+virtual_hw_rw=shenguoyang,wanglin,yujinzhu,lvxianzhe,sundazheng,zhangmingming,huangjiangfeng
+# 公共模块
+d3_rw=qiulongyun,zhangjing,xujian
+frontend_rw=gaowei
+device_rw=wangli
+isv_camera_rw=makun
+isv_comm_rw=makun,wangli
+modules_rw=makun,wangli
+# 工具
+simulator_rw=xujian,wangrui
+global_sensor_hw_test_rw = wangli
+
+# 轨道交通
+# 5C Pro
+5cpro_rw=guowei,xuhang,maxueqi,shangpengpeng,sundazheng,wanglin
+5cpro_r=liqiang
+5cpro_doc_r=liqiang,xujian,zhangguotao
+# 轮对检测
+twds_rw=liqiang,wangzikui,wangli,liyinzhe,gaowei,gaojiaqi,kongzhaorui,shenmengting
+# 360
+360_rw=zhangguotao,xujian,yuantingzhong,gaojiaqi,lvxianzhe,tangwei,zhangyixiang,xuhang,wenghaiwei,tanfuxiang,panhao,gaowei,shenmengting,chenyufan
+# 监控室
+tsmp_rw=gaowei,guowei,liqiang,sundazheng,shangpengpeng,zhangmingming,zhangliyu
+tsmp_doc_trunk_41=yuantingzhong,zhangliyu,zhoudongbin,wangyuhao
+tsmp_doc_trunk_24=qiulongyun
+# 巡检仪
+pcds_rw=guowei,wangrui,gaowei,shenguoyang
+pcds_r=lvxianzhe
+pcds_doc_rw=lvxianze
+
+tnrs_rw= zhangguotao,xujian,zhangyixiang,tangwei,gaojiaqi,lvxianzhe,xuhang,wenghaiwei,tanfuxiang,chenyufan
+
+tpds_rw=xuhang,zhangyixiang,lvxianzhe
+# 军工产品线
+# 光电校靶
+optoelectronic_calibration_rw=lizhang
+# wmps
+wmps_rw=zhangguotao
+
+pvc_inspector_rw = xuhang,zhangguotao,wenghaiwei,gaojiaqi,wangaiping,zhangyixiang,lvxianzhe,shenguoyang,tanfuxiang,panhao
+
+###########################################################################
+# 代码仓库权限
+[softwarerepo:/]
+@sw_manager = rw
+swjenkins = r
+
+[softwarerepo:/modules]
+fangjiansheng = rw
+[softwarerepo:/modules/business/about]
+zhaoshiji = rw
+zhonghuayan = rw
+genghongwei = rw
+[softwarerepo:/modules/business/user_manager]
+liubingdong = rw
+
+# 汽车产品线
+# 在线测量
+[softwarerepo:/products/auto/measure/fixture_measure]
+@fixture_measure_rw = rw
+
+[softwarerepo:/products/auto/measure/inline_measure]
+@inline_measure_rw = rw
+
+
+[softwarerepo:/products/auto/measure/inline_measure/accuware]
+yangbo = rw
+kongzhaorui = rw
+[softwarerepo:/products/auto/measure/inline_measure/accuware/branches/2.2.1/application/src/measure]
+shenguoyang = r
+[softwarerepo:/products/auto/measure/inline_measure/accuware/3.x]
+shenguoyang = rw
+yangbo = rw
+kongzhaorui = rw
+[softwarerepo:/products/auto/measure/inline_measure/accuware/3.x/software/branches/baseline_1.0/components/business/measure_gen]
+gaowei = rw
+[softwarerepo:/products/auto/measure/inline_measure/accuware/3.x/doc/trunk]
+gaowei = rw
+[softwarerepo:/products/auto/measure/inline_measure/accuware/branches/2.2.5_hotfix]
+shenguoyang = r
+
+#视觉引导
+[softwarerepo:/products/auto/guide/legacy]
+@guide_legacy_rw = rw
+
+[softwarerepo:/products/auto/guide/legacy/guide_viewer]
+@guide_viewer_legacy_rw = rw
+
+[softwarerepo:/products/auto/guide/legacy/iga]
+@rf_guide_legacy_rw = rw
+
+[softwarerepo:/products/auto/guide/legacy/rf_guide]
+@rf_guide_legacy_rw = rw
+wanhongchang = rw
+[softwarerepo:/products/auto/guide/legacy/rf_guide/trunk/1.0]
+makun = r
+[softwarerepo:/products/auto/guide/legacy/rf_mod_teach/isv_teach_new_mod]
+genghongwei = r
+[softwarerepo:/products/auto/measure/inline_measure/tools/teach_template]
+genghongwei = r
+[softwarerepo:/products/auto/guide/guide_works]
+@guide_works_rw = rw
+@guide_works_r = r
+
+[softwarerepo:/products/auto/guide/guide_works/tools/upgrade_tools]
+yujinzhu = r
+[softwarerepo:/products/auto/guide/guide_works/tools]
+shenmengting = rw
+[softwarerepo:/products/auto/guide/guide_works_rackposition]
+@guide_works_rackposition_rw = rw
+shangpengpeng = r
+xuhang = rw
+jiangxintao = rw 
+
+[softwarerepo:/products/auto/guide/guide_works_rackposition/rpc_demo]
+makun = r
+qiulongyun = r
+xujian = r
+shenguoyang = r
+liuyujie = r
+wanhongchang = r
+yangtao = r
+dingxinbin = r
+chenyang = r
+
+[softwarerepo:/products/auto/guide/guide_works_rackposition/1.x]
+yujunyi = r
+lvxianzhe = r
+[softwarerepo:/products/auto/guide/guide_works_rackposition/1.x/software/branches/baseline_1.0]
+makun = r
+[softwarerepo:/products/auto/guide/guide_works_rackposition/2.x]
+lvxianzhe = rw
+lutuo = rw
+
+[softwarerepo:/products/auto/guide/guide_works_bestfit]
+@guide_works_bestfit_rw = rw
+@guide_works_bestfit_r = r
+[softwarerepo:/products/auto/guide/guide_works_bestfit/2.x]
+makun = r
+jiangxintao = rw
+
+[softwarerepo:/products/auto/guide/guide_works_bestfit/2.x/doc]
+@guide_works_bestfit_doc_rw = rw
+[softwarerepo:/products/auto/guide/guide_works_bestfit/2.x/software/branches/baseline_2.1]
+wanhongchang = r
+[softwarerepo:/products/auto/guide/guide_works_bestfit/2.x/software/branches/baseline_2.2]
+huangjiangfeng = r
+# 间隙面差
+[softwarerepo:/products/auto/measure/gap_flush]
+@gap_flush_rw = rw
+
+[softwarerepo:/products/auto/measure/gap_flush/auto_gap]
+@auto_gap_rw = rw
+tangwei = r
+
+[softwarerepo:/products/auto/measure/gap_flush/auto_gap/branches/Calibrate]
+wangzikui = rw
+
+[softwarerepo:/products/auto/measure/gap_flush/auto_gap_tofis]
+@auto_gap_rw = rw
+
+[softwarerepo:/products/auto/measure/gap_flush/handy_gap]
+@handygap_rw = rw
+@handygap_r = r
+kuangshui = rw
+
+[softwarerepo:/tools/auto_auth]
+xuhang = rw
+lisheng  = rw
+
+[softwarerepo:/tools/multiscreen_viewer]
+@multiscreen_viewer_rw = rw
+
+[softwarerepo:/tools/production_assist/sensor_assisit_linear/software/application/sensor_assisit_linear]
+gaobo = rw
+[softwarerepo:/tools/production_assist/sensor_assisit_linear]
+
+[softwarerepo:/tools/production_assist]
+@production_assist_rw = rw
+
+[softwarerepo:/tools/production_assist/isv_df_sensors]
+
+[softwarerepo:/tools/pmp/pmp_focus]
+lvxianzhe  = rw
+haoshengli = rw
+
+[softwarerepo:/products/auto/measure/gap_flush/im_gap_flush]
+@im_gapflush_rw = rw
+
+# 蓝光扫描
+[softwarerepo:/products/auto/measure/blue_light/legacy]
+@blue_light_legacy_rw = rw
+
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite]
+@sophi_suite_rw = rw
+@sophi_suite_r = r
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x]
+liqiang = r
+
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/software/branches/baseline_1.1]
+shenguoyang = r
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/doc/trunk/10 详细设计]
+shenguoyang = r
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/software/branches/baseline_1.0/applications/SSTClient]
+@sophi_suite_client_rw = rw
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/software/branches/baseline_1.1/applications/SSTClient]
+wangzikui = r
+
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/software/branches/baseline_1.1/environment]
+wangyuhao = rw
+
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/software/branches/baseline_1.1/components]
+wangyuhao = rw
+[softwarerepo:/products/auto/measure/blue_light/sophi_suite/1.x/software/branches/baseline_1.1/tools/stub]
+wangyuhao = rw
+
+# 基础组件
+[softwarerepo:/platform]
+@platform_rw = rw
+@platform_r = r
+
+[softwarerepo:/platform/0.x/components]
+@platform_components_rw = rw
+@platform_0x_rw = rw
+
+[softwarerepo:/platform/0.x/components/blue_light_scanner]
+mahaoran = r
+jiguoqian = rw
+wangli = rw
+
+[softwarerepo:/platform/0.x/components/global_pos]
+haoshengli = rw
+wangli = rw
+[softwarerepo:/platform/0.x/components/vision_guide/branches]
+wangaiping = r
+
+[softwarerepo:/platform/1.x]
+@platform_1x_rw = rw
+makun = r
+liyixin = r
+[softwarerepo:/platform/1.x/tag]
+huangjiangfeng = rw
+liubingdong = rw
+[softwarerepo:/platform/1.x/3rdparty/libmodbus_3.1.8]
+yujinzhu = rw
+genghongwei = rw
+huangjiangfeng = rw
+[softwarerepo:/platform/1.x/tools]
+huangjiangfeng = rw
+liubingdong = rw
+genghongwei = rw
+zhaoshiji = rw
+[softwarerepo:/platform/1.x/tools/xdat_tools]
+shenmengting = r
+[softwarerepo:/platform/1.x/tools/virtual_hw]
+@virtual_hw_rw = rw
+shenmengting = r
+genghongwei = r
+zhanghongyu = r
+zhaoshiji = r
+sundazheng = rw
+[softwarerepo:/platform/1.x/tools/virtual_hw/branches/file_transfer_platform]
+lvxianzhe = rw
+genghongwei = r
+[softwarerepo:/platform/1.x/tools/virtual_hw/trunk/1.0/src/web-new]
+zhanghongyu = rw
+[softwarerepo:/platform/1.x/tools/gtest]
+wangaiping = r
+shenmengting = r
+[softwarerepo:/platform/1.x/tools/gtest/mock]
+liubingdong = r
+
+[softwarerepo:/platform/1.x/trunk/commonheaders]
+@platform_commonheaders_r = r
+
+[softwarerepo:/platform/1.x/trunk/commonheaders/basic]
+shenmengting = r
+
+[softwarerepo:/platform/1.x/trunk/commonheaders/function]
+shenmengting = r
+
+[softwarerepo:/platform/1.x/trunk/function/camera]
+wangyuhao = r
+lizhang = r
+huangjiangfeng = rw
+liubingdong = rw
+shenmengting = r
+fengshuojie = r
+genghongwei = rw
+zhaoshiji = r
+[softwarerepo:/platform/1.x/trunk/function/alarm]
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/function/startup]
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/function/user_opera_record]
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/function/camera/commonheaders]
+fengshuojie = r
+
+[softwarerepo:/platform/1.x/trunk/function/device]
+wangyuhao = r
+huangjiangfeng = rw
+liubingdong = rw
+genghongwei = r
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/function/file_manager]
+liubingdong = rw
+huangjiangfeng = rw
+[softwarerepo:/platform/1.x/trunk/function/log]
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/function/robot]
+wangaiping = r
+lizhang = r
+huangjiangfeng = rw
+liubingdong = rw
+genghongwei = rw
+shenmengting = r
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/function/restful]
+gaojiaqi = r
+huangjiangfeng = rw
+liubingdong = rw
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/function/comm]
+lizhang = r
+huangjiangfeng = rw
+liubingdong = rw
+genghongwei = rw
+shenmengting = r
+[softwarerepo:/platform/1.x/trunk/function/http]
+huangjiangfeng = rw
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/function/web_socket]
+huangjiangfeng = rw
+liubingdong = rw
+genghongwei = r
+zhaoshiji = r
+[softwarerepo:/platform/1.x/trunk/function/picture_manager]
+liubingdong = rw
+huangjiangfeng = rw
+zhaoshiji = rw
+
+[softwarerepo:/platform/1.x/trunk/function/process_manager]
+huangjiangfeng = r
+liubingdong = rw
+genghongwei =  r
+zhaoshiji = rw
+
+[softwarerepo:/platform/1.x/trunk/function/process_framework]
+huangjiangfeng = rw
+zhaoshiji = rw
+[softwarerepo:/platform/1.x/trunk/commonheaders/function/comm]
+wangli = r
+
+
+[softwarerepo:/platform/1.x/trunk/function/rpc_framework]
+shenguoyang = r
+zhangyixiang = r
+huangjiangfeng = rw
+fengshuojie = r
+liubingdong = r
+genghongwei = rw
+
+[softwarerepo:/platform/1.x/trunk/function/measure_framework]
+huangjiangfeng = rw
+zhaoshiji = rw
+[softwarerepo:/platform/1.x/trunk/function/media]
+liubingdong = r
+genghongwei = r
+[softwarerepo:/platform/1.x/trunk/basic/log]
+huangjiangfeng = rw
+liubingdong = r
+zhaoshiji = rw
+genghongwei = r
+[softwarerepo:/platform/1.x/trunk/basic/net]
+gaojiaqi = r
+zhangyixiang = r
+huangjiangfeng = rw
+liubingdong = r
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/basic/infra]
+huangjiangfeng = rw
+liubingdong = r
+genghongwei = r
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/function/image]
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/function/iconsole]
+liubingdong = rw
+[softwarerepo:/platform/1.x/trunk/basic/image]
+liubingdong = rw
+huangjiangfeng = rw
+
+[softwarerepo:/platform/1.x/trunk/basic/manager]
+huangjiangfeng = rw
+liubingdong = rw
+lizhang = r
+genghongwei = rw
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/basic/database]
+huangjiangfeng = r
+liubingdong = rw
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/trunk/basic/encrypt]
+huangjiangfeng = rw
+genghongwei = r
+
+[softwarerepo:/platform/1.x/trunk/function/database]
+liubingdong = rw
+[softwarerepo:/platform/0.x/commonheaders]
+@platform_0x_r = r
+
+[softwarerepo:/platform/1.x/branch]
+liubingdong = rw
+huangjiangfeng = rw
+[softwarerepo:/platform/1.x/branch/1.0.1-beta_specular_vision/function/rpc_framework]
+huangjiangfeng = r
+genghongwei = r
+zhaoshiji = r
+
+[softwarerepo:/platform/1.x/branch/1.6.0_360]
+huangjiangfeng = rw
+[softwarerepo:/platform/1.x/branch/1.6.0_beta_specular_vision_2022_08_25]
+huangjiangfeng = rw
+[softwarerepo:/platform/1.x/branch/1.7.0_icv3]
+liubingdong = rw
+huangjiangfeng = rw
+[softwarerepo:/platform/1.x/branch/1.9.0_RP1.0]
+genghongwei = rw
+
+[softwarerepo:/platform/1.x/product/cbb_platform_v1/project/windows/scripts/trunk]
+liubingdong = rw
+[softwarerepo:/platform/1.x/product/cbb_platform_v1]
+huangjiangfeng = rw
+liubingdong = rw
+zhaoshiji = rw
+genghongwei = rw
+
+# 公共模块
+[softwarerepo:/tools/modules]
+@modules_rw = rw
+
+[softwarerepo:/tools/isv_comm]
+@isv_comm_rw = rw
+
+[softwarerepo:/tools/isv_camera]
+@isv_camera_rw = rw
+
+[softwarerepo:/tools/device]
+@device_rw = rw
+
+[softwarerepo:/tools/calib_tool]
+fukanglong = rw
+[softwarerepo:/tools/calibration_platform]
+wangrui = rw
+xujian = rw
+wangli = r
+haoshengli = r
+[softwarerepo:/tools/calibration_platform/1.x/software/trunk]
+wanhongchang = r
+[softwarerepo:/frameworks/d3]
+@d3_rw = rw
+gaowei = r
+[softwarerepo:/frameworks/d3/1.x/doc]
+xuhang = r
+[softwarerepo:/frameworks/d3/0.x]
+wangrui = r
+
+[softwarerepo:/frameworks/frontend]
+@frontend_rw = rw
+
+# 绝对测量
+[softwarerepo:/products/auto/measure/abs_measure]
+@abs_measure_rw = rw
+liqiang = r
+fengshuojie = r
+
+# 漆面检测
+[softwarerepo:/products/auto/inspect/specular_vision]
+@specular_vision_rw = rw
+@specular_vision_r = r
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.0]
+liuyujie = r
+@specular_vision_1x_rw = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1]
+liuyujie = r
+shenguoyang = rw
+yangtao = r
+zhangmingming = r
+liqiang = r
+wangzikui = r
+
+
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1_iter3]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.2]
+shenguoyang = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3]
+liuyujie = r
+yangtao = r
+shenguoyang = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/applications/inspection_client]
+liuyujie = rw
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/applications/specular_sensor_server]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/applications/inspection_server]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/tools/specular_vision_tool]
+liuyujie = rw
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/tools/specular_trainning_tool]
+liuyujie = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/components/business/specular_vision_gen]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/components/rpc_client/specular_vision_gen]
+yangtao =  rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/components/rpc_client/specular_vision_sensor]
+yangtao =  rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/components/business/specular_vision_sensor]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.3/components/business/robot_control]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/doc/baseline_1.1]
+liuyujie = r
+shenguoyang = rw
+yangtao = r
+zhangmingming = r
+xujian = r
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.4]
+liuyujie = r
+shenguoyang = rw
+yangtao = rw
+wanhongchang = r
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.4/applications/inspection_client]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.4/applications/inspection_server]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.4/applications/worker_screen_client]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.4/components/rpc_client/specular_vision_gen]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/branch_iteration_1.1.4/components/business/specular_vision_gen]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/doc/baseline_1.1/41 详细设计]
+zhangmingming = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/doc/baseline_1.1/45 发布/漆面镜像文档以及依赖]
+wangzikui = r
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/applications/inspection_client]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/applications/inspection_server]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/applications/specular_sensor_server]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/applications/worker_screen_client]
+liuyujie = rw
+zhangmingming = rw
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/components/rpc_client]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/components/rpc_client/specular_vision_gen]
+liuyujie = rw
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/components/business/specular_vision_gen]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.1/components/business/specular_vision_sensor]
+yangtao = rw
+yangtao = rw
+
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/techdev_2gsensor]
+shenguoyang = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/custom_polish_1.0]
+@specular_vision_1x_rw = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.0/applications/inspection_client]
+jiguoqian = r
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/software/branches/baseline_1.0/components]
+wangyuhao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/doc/trunk]
+@specular_vision_1x_rw = rw
+liuyujie=r
+[softwarerepo:/products/auto/inspect/specular_vision/1.x/doc/branches/techdev_2gsensor]
+shenguoyang = rw
+[softwarerepo:/products/auto/inspect/specular_vision/1.x]
+wangaiping=r
+makun = r
+[softwarerepo:/products/auto/inspect/specular_vision/2.x]
+shenguoyang = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0]
+yangtao = r
+liuyujie = r
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/techdev_2gsensor]
+yangtao = rw
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/branch_for_feite]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/applications/inspection_server]
+yangtao = rw
+liuyujie = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/applications/specular_sensor_server]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/components/business]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/components/business/specular_vision_gen]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/components/rpc_client]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/components/rpc_client/specular_vision_gen]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/components/rpc_common ]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/components/common]
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/applications/inspection_client]
+liuyujie = rw
+yangtao = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/applications/worker_screen_client]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/tools/specular_trainning_tool]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/tools/specular_vision_tool] 
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/tools/sv_sensor_test_tool]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/tools/sensor_config_tool]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/specular_vision/2.x/software/branches/baseline_2.0/tools/plc_monitor]
+liuyujie = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision]
+qiulongyun = rw
+xujian = rw
+shenguoyang = rw
+gaowei = r
+lisheng = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/doc/trunk]
+@tunnel_spec_vision_0x_r = r
+
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9]
+@tunnel_spec_vision_0x_r = r
+shenguoyang = rw
+chenyang = r
+dingxinbin = r
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/branch_iteration_0.10.0]
+liuyujie = r
+yangtao = rw
+makun = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/branch_iteration_0.10.0/applications/tunnel_spec_vision_client]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/branch_iteration_0.10.0/applications/tunnel_spec_vision_node_server]
+liuyujie = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/doc/trunk/41 详细设计]
+makun = rw
+shenguoyang = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/doc/trunk/32 概要设计]
+shenguoyang = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/doc/trunk/41 详细设计/整机测试工具]
+gaojiaqi = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/tools]
+gaojiaqi = rw
+panhao = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/applications/tunnel_spec_vision_client]
+makun = rw
+liuyujie = rw
+wanhongchang = rw
+yangtao = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/applications/tunnel_spec_vision_server]
+wanhongchang = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/applications/tunnel_spec_vision_node_server]
+yangtao = rw
+wanhongchang = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components/business/tunnel_spec_vision_node]
+wanhongchang = rw
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components\rpc_client\tunnel_spec_vision_node]
+wanhongchang = rw
+yangtao = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components/business/tunnel_spec_vision_gen]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components/business/dao_gen]
+yangtao = rw
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/1.x/doc/trunk]
+makun = rw
+lisheng = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components]
+wanhongchang = rw
+yangtao = rw
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/components/rpc_client/tunnel_spec_vision_node]
+yangtao = rw
+
+
+[softwarerepo:/products/auto/inspect/tunnel_spec_vision/0.x/software/branches/baseline_0.9/tools/tsv_test_tool_client]
+yangtao = rw
+# 工具
+[softwarerepo:/frameworks/simulator]
+@simulator_rw = rw
+[softwarerepo:/frameworks/simulator/online_control]
+wangrui = r
+makun = r
+[softwarerepo:/tools/sensor_hw_test/global_sensor]
+@global_sensor_hw_test_rw = rw
+mahaoran = r
+
+# 涂胶检测
+[softwarerepo:/products/auto/inspect/glue]
+@glue_r = r
+
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/4.x]
+@glue_4x_rw = rw
+@glue_4x_r = r
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/4.x/software/branches/baseline_4.0]
+shenmengting = r
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/4.x/software/branches/baseline_4.1]
+panhao = rw
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/4.x/software/branches/baseline_4.2]
+panhao = rw
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/4.x/doc/01]
+wangaiping = r
+
+[softwarerepo:/products/auto/inspect/glue/upload_client]
+@glue_upload_client_rw = rw
+[softwarerepo:/products/auto/inspect/glue/upload_client/trunk/1.0]
+panhao = rw
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/3.x]
+@glue_3x_rw = rw
+liyixin = r
+[softwarerepo:/products/auto/inspect/glue/glue_inspector/3.x/trunk]
+panhao = rw
+[softwarerepo:/products/auto/inspect/glue/aging_glue]
+@aging_glue_rw = rw
+[softwarerepo:/products/auto/inspect/glue/aging_glue/branches/Production_aging/Ternary_sensor]
+wangaiping = r
+[softwarerepo:/products/auto/inspect/glue/global_glue_inspector]
+@global_glue_inspector_rw = rw
+[softwarerepo:/products/auto/inspect/glue/global_glue_inspector/trunk/1.0]
+gaojiaqi = r
+# 焊缝检测
+[softwarerepo:/products/auto/inspect/weld/legacy/software/weld_rework_station_comm]
+
+[softwarerepo:/products/auto/inspect/weld]
+liyixin = rw
+
+[softwarerepo:/products/auto/inspect/weld/legacy]
+@weld_inspec_rw = rw
+wanhongchang = r
+
+[softwarerepo:/products/auto/inspect/weld/weld_inspector]
+@weld_inspec_2x_rw = rw
+
+[softwarerepo:/products/auto/inspect/weld/weld_inspector/2.x/doc/trunk]
+@weld_inspec_2x_rw = rw
+lisheng = rw
+lutuo = rw
+wanhongchang = r
+zhangcheng = r
+gaowei = rw
+shenguoyang = r
+
+[softwarerepo:/products/auto/inspect/weld/weld_inspector/2.x/doc/trunk/41 详细设计]
+wanhongchang = rw
+zhangcheng = rw
+
+[softwarerepo:/products/auto/inspect/weld/weld_inspector/2.x/software/branches/baseline_2.0]
+zhangcheng = rw
+wanhongchang = rw
+shenguoyang = rw
+
+# 数据平台
+[softwarerepo:/products/auto/cloud]
+@cloud_rw = rw
+[softwarerepo:/products/auto/cloud/accu_analyzer]
+@accu_analyzer_rw = rw
+[softwarerepo:/products/auto/cloud/accu_analyzer/doc]
+lisheng = r
+[softwarerepo:/products/auto/cloud/accu_analyzer/doc/02 项目文档/ISVCloud]
+yujunyi = r
+
+# 视觉识别
+[softwarerepo:/products/auto/recognize]
+@recognize_rw = rw
+xuhang = r
+[softwarerepo:/products/auto/recognize/stud_recognizer]
+wangaiping=rw
+gaojiaqi=rw
+tangwei=rw
+chenhao = rw
+zhangmingming = rw
+shangpengpeng = rw
+lvxianzhe = r
+zhanghongyu = rw
+[softwarerepo:/products/auto/recognize/stud_recognizer/1.x/software/branches/usermanager_1.0.0/components/business/user_manager_web]
+fangjiansheng = r
+# 轨道交通产品线
+[softwarerepo:/products/rail_transport]
+xuhang = r
+
+# 5c pro
+[softwarerepo:/products/rail_transport/monitor/5cpro]
+@5cpro_rw = rw
+@5cpro_r = r
+[softwarerepo:/products/rail_transport/monitor/5cpro/doc]
+@5cpro_doc_r = r
+zhangliyu = rw
+
+# 巡检仪
+[softwarerepo:/products/rail_transport/monitor/pcds]
+@pcds_rw = rw
+@pcds_r = r
+
+[softwarerepo:/products/rail_transport/monitor/pcds/doc]
+@pcds_doc_rw = rw
+[softwarerepo:/products/rail_transport/monitor/pcds/1.x/software/branches/iteration_1.0.1]
+shenmengting = r
+[softwarerepo:/products/rail_transport/monitor/pcds/1.x/software/branches/baseline_1.1]
+dingxinbin = rw
+chenyang = rw
+
+[softwarerepo:/products/rail_transport/monitor/pcds/1.x]
+makun = rw
+dingxinbin = r
+chenyang = r
+lutuo = rw
+xujian = r
+
+# 轮对
+[softwarerepo:/products/rail_transport/monitor]
+panhao = rw
+[softwarerepo:/products/rail_transport/monitor/twds]
+@twds_rw = rw
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/doc]
+lvxianzhe = rw
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/doc/trunk]
+dingxinbin = rw
+chenyang = rw
+wanhongchang  = rw
+yujunyi = r
+
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/software]
+lvxianzhe = r
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/software/trunk]
+dingxinbin = r
+chenyang = r
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/software/trunk/applications/debugger]
+dingxinbin = rw
+chenyang = rw
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/software/branches/baseline_1.0]
+dingxinbin = rw
+chenyang = rw
+wanhongchang = r
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/software/branches/baseline_1.0/applications/debugger]
+dingxinbin = rw
+chenyang = rw
+[softwarerepo:/products/rail_transport/monitor/twds/1.x/software/branches/baseline_1.0/tools]
+chenyang = rw
+wanhongchang = rw
+[softwarerepo:/products/rail_transport/monitor/trcc]
+zhangguotao = rw
+gaojiaqi = rw
+tangwei = rw
+zhangyixiang = r
+lvxianzhe  = rw
+chenyufan = rw
+
+
+# 监控平台
+[softwarerepo:/products/rail_transport/monitor/tsmp]
+@tsmp_rw = rw
+
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x]
+xujian = rw
+wangyuhao = rw
+zhonghuayan = rw
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x/software/branches/baseline_1.0]
+chenyang = rw
+wanhongchang = rw
+
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x/doc]
+zhangguotao = r
+yuantingzhong = r
+zhoudongbin = r
+zhangliyu = r
+lisheng = r
+wangyuhao = r
+lisheng  = rw
+zhouhao  = rw
+
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x/doc/tsmp/44 集成测试]
+lisheng = rw
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x/doc/trunk/41 详细设计]
+@tsmp_doc_trunk_41=rw
+
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x/doc/trunk/24 需求规格]
+@tsmp_doc_trunk_24=r
+
+[softwarerepo:/products/rail_transport/monitor/tsmp/1.x/doc/trunk]
+liyixin=r
+chenyang = rw
+
+# 受电弓
+[softwarerepo:/products/rail_transport/monitor/tpds]
+@tpds_rw = rw
+[softwarerepo:/products/rail_transport/monitor/tpds/1.0]
+sundazheng = rw
+zhonghuayan = rw
+wangaiping = rw
+haoshengli = rw
+wanhongchang = r
+[softwarerepo:/products/rail_transport/monitor/tpds/1.0/software/branches/baseline_1.0]
+wangaiping = rw
+[softwarerepo:/products/rail_transport/monitor/tpds/1.0/software/branches/baseline_1.0/tool]
+zhangcheng = rw
+[softwarerepo:/products/rail_transport/monitor/tpds/1.0/doc/trunk/61 整体测试软件]
+zhangcheng =  rw
+# 360
+[softwarerepo:/products/rail_transport/monitor/360]
+@360_rw = rw
+
+[softwarerepo:/products/rail_transport/monitor/tnrs]
+@tnrs_rw = rw
+
+[softwarerepo:/products/rail_transport/monitor/tccu]
+@tnrs_rw = rw
+
+[softwarerepo:/products/rail_transport/monitor/tccu/rpc_client/1.0.0-alpha.1]
+liyinzhe = r
+
+[softwarerepo:/products/rail_transport/monitor/tccu/rpc_client]
+wangyuhao = r
+
+# 军工产品线
+# 光电校靶
+[softwarerepo:/products/military/optoelectronic_calibration]
+@optoelectronic_calibration_rw = rw
+
+# wmps
+[softwarerepo:/products/military/wmps]
+@wmps_rw = rw
+
+
+# 部门进度报告
+[softwarerepo:/workreport]
+@sw_group = rw
+
+#加密授权
+[softwarerepo:/hz/components/license_manager]
+* = 
+
+[softwarerepo:/platform/0.x/components/license_manager]
+* = 
+zhuangxun = rw
+
+[softwarerepo:/platform/0.x/components/license_manager/doc/feature]
+lizhang = r
+
+# 杭州仓库备份
+[softwarerepo:/hz/components]
+lizhang = rw
+fangjiansheng = r
+[softwarerepo:/hz/components/sensor/trunk/2.0]
+wangrui = r
+xujian = r
+[softwarerepo:/hz/commonheaders]
+fangjiansheng = r
+
+[softwarerepo:/hz/projects/inlinemeasure]
+wangli=r
+
+[softwarerepo:/hz/projects/data_inspector]
+wangli=r
+
+[softwarerepo:/hz/tools]
+fangjiansheng = r
+# bin-picking
+[softwarerepo:/products/auto/guide/bin_picking]
+@bin_picking_rw = rw
+@bin_picking_r = r
+
+[softwarerepo:/products/auto/guide/bin_picking/1.x]
+shenmengting = r
+
+[softwarerepo:/products/auto/guide/bin_picking/1.x/software/trunk/tools/calibrate]
+zhangcheng = rw
+wanhongchang = rw
+[softwarerepo:/products/auto/inspect/glue/pvc_inspector]
+@pvc_inspector_rw = rw
+
+# 原始天津SVN仓库权限
+[tj_softwarerepo_legacy:/]
+@sw_manager = rw
+liyixin = r
+
+[tj_softwarerepo_legacy:/algorithms]
+liyixin = r
+[tj_softwarerepo_legacy:/projects/20180226-ImageMatch]
+wangaiping = rw
+[tj_common_legacy:/]
+@sw_manager = rw
+
+# 原始杭州SVN仓库权限
+[softwarerepo_legacy:/]
+@sw_manager = rw
+
+[softwarerepo_legacy:/projects/weld_inspection]
+liyixin = r
+
+[softwarerepo_legacy:/components]
+yujinzhu = r
+fangjiansheng = r
+
+[softwarerepo_legacy:/commonheaders]
+yujinzhu = r
+fangjiansheng = r
+
+[softwarerepo_legacy:/tools]
+fangjiansheng = r
+
+# 原SVN 目录
+[softwarerepo:/tj/projects/bluelightinspector]
+makun = r
+
+[softwarerepo:/tj/projects/glue_inspector]
+wenghaiwei = r
+
+[softwarerepo:/hz/platform]
+wanglin = r
+fangjiansheng = r
+yujinzhu = r
+
+[softwarerepo:/hz/projects/specular_vision]
+qiulongyun = r
+
+[softwarerepo:/hz/projects/rail_transport/PCDS/software/workstation/application/detection_server]
+guowei = r
+
+[softwarerepo:/hz/projects/blue_light/software/application/SSTClient/trunk]
+wangrui = r
+
+# 特殊路径
+[tj_softwarerepo_legacy:/projects/20170822-isvInternalTools]
+wangli = r
+liyixin = r
+[tj_softwarerepo_legacy:/projects/20171121-isvComm]
+wangaiping = r
+
+# 测试路径
+[test:/]
+zhuangxun = rw

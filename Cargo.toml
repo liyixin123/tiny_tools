@@ -8,15 +8,15 @@ edition = "2021"
 [dependencies]
 druid = { git = "https://github.com/linebender/druid.git", features = ["im"] }
 #instant = { version = "0.1.6", features = ["wasm-bindgen"] }
-tracing = { version = "0.1.22" }
-open = "5.1"
+tracing = { version = "0.1.40" }
+open = "5.3"
 tokio = { version = "1" }
 prettydiff = "0.7"
-lazy_static = "1.4"
-regex = "1.8"
+lazy_static = "1.5"
+regex = "1.10"
 serde = { version = "1.0", features = ["derive"] }
 reqwest = { version = "0.12", features = ["blocking", "multipart"] }
 dirs = "5.0"
-anyhow = "1.0.86"
+anyhow = "1.0"
 subversion_edge_modify_tool = { path = "../subversion_edge_modify_tool" }
-font-kit ="0.13.2"
+font-kit ="0.14"
