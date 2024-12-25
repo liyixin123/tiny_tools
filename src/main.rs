@@ -237,7 +237,9 @@ fn extract_permissions(input_str: &str) -> Option<String> {
 }
 
 fn split_string(input: &str) -> Vec<&str> {
-    input.split([',', '，'].as_ref()).collect()
+    input.split([',', '，','、'].as_ref())
+    .map(|s| s.trim())
+    .collect()
 }
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())

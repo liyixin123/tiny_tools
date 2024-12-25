@@ -34,17 +34,6 @@ http://172.17.102.22:18080/svn/softwarerepo/products/auto/inspect/tunnel_spec_vi
         assert_eq!(result.unwrap(), expected);
     }
 
-    #[test]
-    fn test_split_by_comma() {
-        assert_eq!(split_string("hello,world"), vec!["hello", "world"]);
-        assert_eq!(split_string("你好,世界"), vec!["你好", "世界"]);
-    }
-
-    #[test]
-    fn test_split_by_chinese_comma() {
-        assert_eq!(split_string("hello，world"), vec!["hello", "world"]);
-        assert_eq!(split_string("你好，世界"), vec!["你好", "世界"]);
-    }
 
     #[test]
     fn test_split_by_both_commas() {
@@ -52,6 +41,14 @@ http://172.17.102.22:18080/svn/softwarerepo/products/auto/inspect/tunnel_spec_vi
             split_string("hello,world，rust"),
             vec!["hello", "world", "rust"]
         );
+        // 用 、 分割
+        assert_eq!(
+            split_string("hello,world，rust、c"),
+            vec!["hello", "world", "rust", "c"]
+        );
+        // 去除首尾空格
+        assert_eq!(split_string("你好，世界、hello, good"), vec!["你好", "世界","hello","good"]);
+        assert_eq!(split_string("你好,世界"), vec!["你好", "世界"]);
     }
 
     #[test]
