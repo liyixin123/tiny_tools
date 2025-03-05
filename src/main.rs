@@ -237,7 +237,7 @@ fn extract_permissions(input_str: &str) -> Option<String> {
 }
 
 fn split_string(input: &str) -> Vec<&str> {
-    input.split([',', '，','、'].as_ref())
+    input.split([',', '，','、', ';','；'].as_ref())
     .map(|s| s.trim())
     .collect()
 }
