@@ -178,4 +178,34 @@ lizhang
 http://172.17.102.22:18080/svn/softwarerepo/platform/1.x/branch/1.11.0-beta-360_2023-11-29/function/robot 读写";
         assert_eq!(extract_name(str3), Some("lizhang".to_string()));
     }
+
+    #[test]
+    fn test_split_string() {
+        // 测试各种分隔符
+        let input1 = "user1,user2,user3";
+        let input2 = "user1，user2，user3";
+        let input3 = "user1、user2、user3";
+        let input4 = "user1;user2;user3";
+        let input5 = "user1；user2；user3";
+        let input6 = "user1,user2；user3、user4;user5，user6"; // 混合分隔符
+
+        let expected = vec!["user1", "user2", "user3"];
+        let expected_mixed = vec!["user1", "user2", "user3", "user4", "user5", "user6"];
+
+        assert_eq!(split_string(input1), expected);
+        assert_eq!(split_string(input2), expected);
+        assert_eq!(split_string(input3), expected);
+        assert_eq!(split_string(input4), expected);
+        assert_eq!(split_string(input5), expected);
+        assert_eq!(split_string(input6), expected_mixed);
+
+        // 测试空格处理
+        let input_with_spaces = "user1 , user2 , user3";
+        assert_eq!(split_string(input_with_spaces), expected);
+
+        // 测试空字符串
+        let empty_input = "";
+        assert_eq!(split_string(empty_input), vec![""]);
+    }
+
 }
