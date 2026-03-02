@@ -193,15 +193,17 @@ impl SVNAddress {
 
         Some(result)
     }
-    async fn apply_to_local(&mut self) {
+    async fn apply_to_local(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         if let Some(permissions) = self.generate_permissions() {
-            modify_auths_local(&permissions).await;
+            modify_auths_local(&permissions).await?;
         }
+        Ok(())
     }
-    async fn apply_to_remote(&mut self) {
+    async fn apply_to_remote(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         if let Some(permissions) = self.generate_permissions() {
-            modify_auths_remote(&permissions).await;
+            modify_auths_remote(&permissions).await?;
         }
+        Ok(())
     }
 }
 
@@ -361,8 +363,10 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         })
         .on_click(|_ctx, data, _env| {
             let rt = tokio::runtime::Runtime::new().unwrap();
-            rt.block_on(data.apply_to_local());
-            data.set_message("权限生成成功,打开备份查看".to_string(), MessageType::Info);
+            match rt.block_on(data.apply_to_local()) {
+                Ok(_) => data.set_message("权限生成成功，打开备份查看".to_string(), MessageType::Info),
+                Err(e) => data.set_message(format!("操作失败：{}", e), MessageType::Error),
+            }
         });
     let btn_open_backup = Button::<SVNAddress>::new("查看备份")
         .fix_width(BUTTON_WIDTH)
@@ -380,8 +384,10 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
         .on_click(|_ctx, data, _env| {
             let rt = tokio::runtime::Runtime::new().unwrap();
             data.set_message("正在修改权限...".to_string(), MessageType::Info);
-            rt.block_on(data.apply_to_remote());
-            data.set_message("权限生成成功".to_string(), MessageType::Info);
+            match rt.block_on(data.apply_to_remote()) {
+                Ok(_) => data.set_message("权限生成成功".to_string(), MessageType::Info),
+                Err(e) => data.set_message(format!("操作失败：{}", e), MessageType::Error),
+            }
         });
     let checkbox_read_write = Checkbox::new("读写").lens(SVNAddress::read_write);
     let mut col = Flex::column().with_flex_child(label_svn, 1.0);
