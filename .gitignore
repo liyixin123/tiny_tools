@@ -2,3 +2,5 @@
 .idea/**
 .env
 Cargo.lock
+/.plans
+/.claude

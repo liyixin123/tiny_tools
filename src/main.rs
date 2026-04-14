@@ -2,7 +2,10 @@
 
 #![windows_subsystem = "windows"]
 
+mod app;
+mod common;
 mod pic_uploader;
+mod svn_prune;
 mod tests;
 
 use anyhow::Result;
@@ -20,6 +23,8 @@ use std::sync::Mutex;
 use subversion_edge_modify_tool::permissions::Permissions;
 use subversion_edge_modify_tool::start_init::get_backups_dir;
 use subversion_edge_modify_tool::{modify_auths_local, modify_auths_remote};
+
+use crate::common::message::MessageType;
 
 const BASE_URL: &str = "http://172.17.102.22:18080/svn/softwarerepo";
 const BAD_FORMAT_STR: &str = "格式错误";
@@ -61,12 +66,6 @@ impl ListIter<TextBoxData> for SVNAddress {
     }
 }
 
-#[derive(Clone, Copy)]
-enum MessageType {
-    Info,
-    Error,
-}
-
 #[derive(Data, Clone, Lens)]
 struct SVNAddress {
     old: String,
@@ -77,6 +76,9 @@ struct SVNAddress {
     message: String,
     message_color: druid::Color,
 }
+
+/// app.rs 通过 crate::SvnAddState 引用此类型
+pub(crate) type SvnAddState = SVNAddress;
 
 impl SVNAddress {
     fn new() -> SVNAddress {
@@ -156,10 +158,7 @@ impl SVNAddress {
     }
     fn set_message(&mut self, message: String, message_type: MessageType) {
         self.message = message;
-        match message_type {
-            MessageType::Info => self.message_color = druid::Color::GREEN, // 绿色
-            MessageType::Error => self.message_color = druid::Color::RED,  // 红色
-        }
+        self.message_color = message_type.color();
     }
 
     fn generate_permissions(&mut self) -> Option<Vec<Permissions>> {
@@ -247,9 +246,10 @@ fn main() {
     let main_window = WindowDesc::new(build_root_widget())
         .title("小工具")
         .window_size((1200.0, 800.0));
-    let initial_state = SVNAddress::new();
+    let initial_state = app::AppState::new();
 
     AppLauncher::with_window(main_window)
+        .delegate(app::PruneDelegate)
         .log_to_console()
         .configure_env(|env, _| {
             let font_name = "阿里巴巴普惠体 3.0";
@@ -291,19 +291,28 @@ fn convert_address(src: String) -> String {
     ret
 }
 
-fn open_folder(path: &str) -> Result<(), std::io::Error> {
-    #[cfg(target_os = "windows")]
-    {
-        std::process::Command::new("explorer").arg(path).spawn()?;
-    }
-    Ok(())
+/// 委托 common::util::open_folder，保留此函数供 main.rs 内部使用。
+pub(crate) fn open_folder(path: &str) -> std::io::Result<()> {
+    common::util::open_folder(path)
 }
 fn is_font_installed(font_name: &str) -> bool {
     font_kit::source::SystemSource::new()
         .select_family_by_name(font_name)
         .is_ok()
 }
-fn build_root_widget() -> impl Widget<SVNAddress> {
+fn build_root_widget() -> impl Widget<app::AppState> {
+    let svn_add_tab = build_svn_add_widget().lens(app::AppState::svn_add);
+    let prune_tab = svn_prune::ui::build_prune_tab();
+
+    let tabs = Tabs::new()
+        .with_tab("SVN权限开通", svn_add_tab)
+        .with_tab("SVN权限瘦身", prune_tab)
+        .with_tab("Proxy", Label::new("Proxy settings"));
+
+    Flex::column().with_flex_child(tabs, 1.0)
+}
+
+fn build_svn_add_widget() -> impl Widget<SVNAddress> {
     let label_svn = Label::dynamic(|data: &SVNAddress, _env: &Env| {
         if data.message.is_empty() {
             "输入原始地址，点击结果框可直接复制".to_string()
@@ -364,8 +373,7 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
                 || data.message == BAD_FORMAT_STR
         })
         .on_click(|_ctx, data, _env| {
-            let rt = tokio::runtime::Runtime::new().unwrap();
-            match rt.block_on(data.apply_to_local()) {
+            match common::runtime::rt().block_on(data.apply_to_local()) {
                 Ok(_) => data.set_message("权限生成成功，打开备份查看".to_string(), MessageType::Info),
                 Err(e) => data.set_message(format!("操作失败：{}", e), MessageType::Error),
             }
@@ -384,9 +392,8 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
                 || data.message == BAD_FORMAT_STR
         })
         .on_click(|_ctx, data, _env| {
-            let rt = tokio::runtime::Runtime::new().unwrap();
             data.set_message("正在修改权限...".to_string(), MessageType::Info);
-            match rt.block_on(data.apply_to_remote()) {
+            match common::runtime::rt().block_on(data.apply_to_remote()) {
                 Ok(_) => data.set_message("权限生成成功".to_string(), MessageType::Info),
                 Err(e) => data.set_message(format!("操作失败：{}", e), MessageType::Error),
             }
@@ -405,10 +412,5 @@ fn build_root_widget() -> impl Widget<SVNAddress> {
     col.add_flex_child(textbox_out, 5.0);
     col.set_cross_axis_alignment(CrossAxisAlignment::Center);
 
-    let tabs = Tabs::new()
-        .with_tab("SVN权限开通", col)
-        .with_tab("Proxy", Label::new("Proxy settings"));
-
-    Flex::column().with_flex_child(tabs, 1.0)
-    // .debug_paint_layout()
+    col
 }
