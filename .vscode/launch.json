@@ -1,0 +1,341 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'tiny_tools'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=tiny_tools",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "tiny_tools",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'tiny_tools'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=tiny_tools",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "tiny_tools",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'cursor'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=cursor",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "cursor",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'cursor'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=cursor",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "cursor",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'flex'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=flex",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "flex",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'flex'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=flex",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "flex",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'identity'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=identity",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "identity",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'identity'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=identity",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "identity",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'img_upload'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=img_upload",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "img_upload",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'img_upload'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=img_upload",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "img_upload",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'lens'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=lens",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "lens",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'lens'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=lens",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "lens",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'list'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=list",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "list",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'list'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=list",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "list",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'my_dyn_add_textbox_demo'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=my_dyn_add_textbox_demo",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "my_dyn_add_textbox_demo",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'my_dyn_add_textbox_demo'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=my_dyn_add_textbox_demo",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "my_dyn_add_textbox_demo",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'tabs'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=tabs",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "tabs",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'tabs'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=tabs",
+                    "--package=tiny_tools"
+                ],
+                "filter": {
+                    "name": "tabs",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
