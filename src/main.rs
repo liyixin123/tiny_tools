@@ -276,6 +276,8 @@ fn replace_str(src: String) -> String {
     REGEXES
         .iter()
         .fold(ret, |acc, regex| regex.replace_all(&acc, "").to_string())
+        .trim_end_matches('/')
+        .to_string()
 }
 
 fn convert_address(src: String) -> String {
