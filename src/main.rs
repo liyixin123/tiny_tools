@@ -96,7 +96,7 @@ impl SVNAddress {
         }
     }
     #[allow(dead_code)]
-    fn set_old(&mut self, old:&str){
+    fn set_old(&mut self, old: &str) {
         self.old = old.to_string();
     }
     fn update(&mut self) {
@@ -183,7 +183,7 @@ impl SVNAddress {
                     user: name.to_string(),
                     auth: String::from(auth),
                 };
-               users.push(user_auth);
+                users.push(user_auth);
             }
             // let permission = Permissions::new(repo, user, auth);
             let permission = Permissions::new_from_users(repo, users);
@@ -238,9 +238,10 @@ fn extract_permissions(input_str: &str) -> Option<String> {
 }
 
 fn split_string(input: &str) -> Vec<&str> {
-    input.split([',', '，','、', ';','；'].as_ref())
-    .map(|s| s.trim())
-    .collect()
+    input
+        .split([',', '，', '、', ';', '；'].as_ref())
+        .map(|s| s.trim())
+        .collect()
 }
 fn main() {
     let main_window = WindowDesc::new(build_root_widget())
@@ -306,8 +307,7 @@ fn build_root_widget() -> impl Widget<app::AppState> {
 
     let tabs = Tabs::new()
         .with_tab("SVN权限开通", svn_add_tab)
-        .with_tab("SVN权限瘦身", prune_tab)
-        .with_tab("Proxy", Label::new("Proxy settings"));
+        .with_tab("SVN权限瘦身", prune_tab);
 
     Flex::column().with_flex_child(tabs, 1.0)
 }
@@ -372,12 +372,14 @@ fn build_svn_add_widget() -> impl Widget<SVNAddress> {
                 || data.new_addrs.is_empty()
                 || data.message == BAD_FORMAT_STR
         })
-        .on_click(|_ctx, data, _env| {
-            match common::runtime::rt().block_on(data.apply_to_local()) {
-                Ok(_) => data.set_message("权限生成成功，打开备份查看".to_string(), MessageType::Info),
+        .on_click(
+            |_ctx, data, _env| match common::runtime::rt().block_on(data.apply_to_local()) {
+                Ok(_) => {
+                    data.set_message("权限生成成功，打开备份查看".to_string(), MessageType::Info)
+                }
                 Err(e) => data.set_message(format!("操作失败：{}", e), MessageType::Error),
-            }
-        });
+            },
+        );
     let btn_open_backup = Button::<SVNAddress>::new("查看备份")
         .fix_width(BUTTON_WIDTH)
         .on_click(|_, data, _| {

@@ -1,9 +1,7 @@
 // SVN 权限瘦身 Tab 的 UI 构建。
 // 数据类型为 SvnPruneState（通过 app.rs 里 AppState::svn_prune lens 接入）。
 
-use druid::widget::{
-    Button, Checkbox, Either, Flex, Label, List, Scroll, SizedBox, TextBox,
-};
+use druid::widget::{Button, Checkbox, Either, Flex, Label, List, Scroll, SizedBox, TextBox};
 use druid::{Color, Env, EventCtx, Widget, WidgetExt};
 
 use crate::app::AppState;
@@ -78,18 +76,17 @@ pub fn build_prune_tab() -> impl Widget<AppState> {
             },
         ));
 
-    let btn_select_all = Button::<AppState>::new("全选")
-        .on_click(|_, data: &mut AppState, _| {
-            for row in data.svn_prune.all_users.iter_mut() {
-                if row.visible {
-                    row.selected = true;
-                }
+    let btn_select_all = Button::<AppState>::new("全选").on_click(|_, data: &mut AppState, _| {
+        for row in data.svn_prune.all_users.iter_mut() {
+            if row.visible {
+                row.selected = true;
             }
-            rebuild_detail(data);
-        });
+        }
+        rebuild_detail(data);
+    });
 
-    let btn_deselect_all = Button::<AppState>::new("全不选")
-        .on_click(|_, data: &mut AppState, _| {
+    let btn_deselect_all =
+        Button::<AppState>::new("全不选").on_click(|_, data: &mut AppState, _| {
             for row in data.svn_prune.all_users.iter_mut() {
                 row.selected = false;
             }
@@ -131,7 +128,12 @@ pub fn build_prune_tab() -> impl Widget<AppState> {
 
     // ── 右栏：权限明细 ───────────────────────────────────────
     let selected_count_label = Label::dynamic(|data: &AppState, _: &Env| {
-        let n = data.svn_prune.all_users.iter().filter(|r| r.selected).count();
+        let n = data
+            .svn_prune
+            .all_users
+            .iter()
+            .filter(|r| r.selected)
+            .count();
         if n == 0 {
             "请在左侧勾选用户".to_string()
         } else {
@@ -209,7 +211,7 @@ pub fn build_prune_tab() -> impl Widget<AppState> {
             }
         });
 
-    let btn_gen_preview = Button::<AppState>::new("生成预览")
+    let btn_gen_preview = Button::<AppState>::new("保存本地")
         .fix_width(BTN_W)
         .disabled_if(|data: &AppState, _| {
             data.svn_prune.busy
@@ -305,18 +307,15 @@ pub fn build_prune_tab() -> impl Widget<AppState> {
 // ── 二次确认弹窗内容 ─────────────────────────────────────────
 
 fn build_confirm_panel() -> impl Widget<AppState> {
-    let summary = Label::dynamic(|data: &AppState, _: &Env| {
-        data.svn_prune.confirm_summary.clone()
-    })
-    .with_line_break_mode(druid::widget::LineBreaking::WordWrap);
+    let summary = Label::dynamic(|data: &AppState, _: &Env| data.svn_prune.confirm_summary.clone())
+        .with_line_break_mode(druid::widget::LineBreaking::WordWrap);
 
-    let btn_cancel = Button::<AppState>::new("取消")
-        .on_click(|_, data: &mut AppState, _| {
-            data.svn_prune.confirm_open = false;
-        });
+    let btn_cancel = Button::<AppState>::new("取消").on_click(|_, data: &mut AppState, _| {
+        data.svn_prune.confirm_open = false;
+    });
 
-    let btn_confirm = Button::<AppState>::new("确认应用到服务器")
-        .on_click(|ctx: &mut EventCtx, data: &mut AppState, _| {
+    let btn_confirm = Button::<AppState>::new("确认应用到服务器").on_click(
+        |ctx: &mut EventCtx, data: &mut AppState, _| {
             data.svn_prune.confirm_open = false;
             let reqs = build_prune_requests(data);
             if reqs.is_empty() {
@@ -328,7 +327,8 @@ fn build_confirm_panel() -> impl Widget<AppState> {
             data.svn_prune.stage = PruneStage::Applying;
             let sink = ctx.get_external_handle();
             actions::apply_remote(reqs, sink);
-        });
+        },
+    );
 
     Flex::column()
         .with_child(
@@ -373,11 +373,13 @@ fn build_prune_requests(data: &AppState) -> Vec<crate::svn_prune::authz::PruneRe
 
     by_user
         .into_iter()
-        .map(|(user, (repos, groups))| crate::svn_prune::authz::PruneRequest {
-            user,
-            repos_to_remove: repos,
-            groups_to_remove: groups,
-        })
+        .map(
+            |(user, (repos, groups))| crate::svn_prune::authz::PruneRequest {
+                user,
+                repos_to_remove: repos,
+                groups_to_remove: groups,
+            },
+        )
         .collect()
 }
 
