@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目简介
 
-这是一个 Windows 桌面小工具，基于 [druid](https://github.com/linebender/druid) GUI 框架构建。主要功能是将 SVN 申请表格中带 IP 的完整地址转换为简短的权限路径格式，并可直接写入本地或远程 SVN 服务器的权限文件。
+这是一个 Windows 桌面小工具，基于 [druid](https://github.com/linebender/druid) GUI 框架构建，有两个主要功能 Tab：
+- **SVN权限开通**：将申请表格中的完整 SVN 地址转换为权限路径，写入本地或远程 authz 文件
+- **SVN权限瘦身**：从远程拉取 authz，批量删除指定用户的仓库权限及用户组成员资格
 
 本地依赖：`subversion_edge_modify_tool`（路径：`../subversion_edge_modify_tool`），负责实际读写 SVN authz 文件，需提前在本地准备好。
 
@@ -18,11 +20,10 @@ just build
 
 # 运行所有测试
 cargo test
-# 或
-just test
 
-# 运行单个测试
+# 运行单个测试（模块::测试名）
 cargo test test_convert_address
+cargo test svn_prune::authz::tests::test_remove_user_from_repo
 
 # 安装到当前用户的 Programs 目录（Windows）
 just deploy
@@ -33,50 +34,76 @@ cargo clean
 
 ## 架构说明
 
-所有逻辑集中在 `src/` 下三个文件：
+```
+src/
+├── main.rs              # 入口、窗口、字体、Tabs 装配；SVN开通页 UI 及业务逻辑
+├── app.rs               # 顶层 AppState、AppDelegate(PruneDelegate)、异步 Selector 定义
+├── tests.rs             # main.rs 相关单元测试
+├── pic_uploader.rs      # 图片上传（暂未接入主界面）
+├── common/
+│   ├── message.rs       # MessageType { Info, Error }，统一 set_message 颜色
+│   ├── runtime.rs       # OnceLock<tokio::Runtime> 单例，全局共用
+│   └── util.rs          # open_folder()（Windows: explorer）
+└── svn_prune/
+    ├── authz.rs         # authz 解析器（纯逻辑，可单测）
+    ├── state.rs         # SvnPruneState / UserRow / PermissionRow / PruneStage
+    ├── actions.rs       # 异步动作：load_remote / gen_preview / apply_remote
+    └── ui.rs            # 权限瘦身 Tab UI
+```
 
-| 文件 | 职责 |
-|---|---|
-| `src/main.rs` | 应用入口、GUI 构建、核心业务逻辑 |
-| `src/tests.rs` | 单元测试 |
-| `src/pic_uploader.rs` | 图片上传功能（暂未接入主界面） |
+### 顶层状态
 
-### 核心数据结构
+`AppState { svn_add: SVNAddress, svn_prune: SvnPruneState }` 是整个应用的根状态，实现 `druid::Data + Lens`。  
+`SVNAddress`（通过 `pub(crate) type SvnAddState = SVNAddress` 别名供 app.rs 引用）是开通页状态。
 
-`SVNAddress`（实现 `druid::Data` + `druid::Lens`）是整个应用的状态：
+### 异步模式（权限瘦身 Tab）
 
-- `old: String` — 用户粘贴的原始申请文本
-- `new_addrs: Vector<TextBoxData>` — 转换后的路径列表（可点击复制）
-- `names: String` — 提取出的 SVN 账号名称
-- `read_write: bool` — 读写权限标志
-- `backup_path: String` — 备份目录路径
-- `message / message_color` — 状态提示信息
+所有网络操作不阻塞 UI，统一用 `ExtEventSink + Selector` 回调：
 
-### 地址转换流程
+```
+按钮 on_click
+  → data.svn_prune.set_busy(...)
+  → actions::xxx(ctx.get_external_handle())     // 立即返回
+      └─ common::runtime::rt().spawn(async {
+             let result = await 网络调用;
+             sink.submit_command(PRUNE_xxx_DONE, result, Target::Auto);
+         })
+          ↓
+PruneDelegate::command(PRUNE_xxx_DONE)           // UI 线程回调
+  → 回写 state，busy=false，set_message
+```
 
-`SVNAddress::update()` 驱动整个转换流程：
+三个 Selector 定义在 `app.rs`：`PRUNE_LOAD_DONE` / `PRUNE_PREVIEW_DONE` / `PRUNE_APPLY_DONE`。
 
-1. `extract_name()` — 用正则从申请文本中提取 "SVN账号名称" 后一行的账号
-2. `extract_substrings_containing_base_url()` — 按空白字符分割，过滤含 `BASE_URL` 的片段
-3. `extract_permissions()` — 从末尾往前找第一个含「只读/读写」的行
-4. `convert_address()` → `replace_str()` — 将完整 URL 转换为 `[softwarerepo:/path/to/repo]` 格式，同时去掉括号注释和末尾斜杠
+### authz 解析器（`svn_prune/authz.rs`）
 
-### 关键常量
+采用**最小改动策略**：保存 `raw_lines: Vec<String>` 原文，删除操作只记录行索引（`tombstones`）或改写内容（`overrides`），序列化时过滤/替换，保留注释、空行、CRLF、BOM。
 
-- `BASE_URL`：硬编码为 `http://172.17.102.22:18080/svn/softwarerepo`
-- `SEPARATOR`：地址末尾分隔符（`/` 和空格）
-- `REGEXES`：用于剔除地址尾部括号注释的正则列表
+关键方法：
+- `AuthzModel::parse(content)` — 检测 BOM/CRLF，扫描各 section
+- `real_users()` — 排除 `@group` 引用，返回真人账号集合
+- `lookup(user)` — 查询某用户的仓库授权 + 所属用户组
+- `apply_prune(reqs)` — 填充 tombstones/overrides，返回 ImpactReport
+- `serialize()` — 输出改写后的 authz 文本
 
-### 权限写入
+### 开通页地址转换流程（`main.rs`）
 
-`generate_permissions()` 将转换结果组装成 `subversion_edge_modify_tool::permissions::Permissions` 结构体，再由：
-- `apply_to_local()` — 写入本地 authz 文件（含备份）
-- `apply_to_remote()` — 通过 HTTP 写入远程 SVN Edge 服务器
+`SVNAddress::update()` 驱动：
+1. `extract_name()` — 正则提取 "SVN账号名称" 后一行
+2. `extract_substrings_containing_base_url()` — 过滤含 `BASE_URL` 的片段
+3. `extract_permissions()` — 从末尾找第一个含「只读/读写」的行
+4. `convert_address()` → `replace_str()` — 转换为 `[softwarerepo:/path]` 格式
 
-两者均通过 `tokio::runtime::Runtime::new().unwrap().block_on(...)` 在点击事件中同步调用异步函数。
+`BASE_URL` 硬编码为 `http://172.17.102.22:18080/svn/softwarerepo`。
+
+### 备份目录
+
+`subversion_edge_modify_tool::start_init::get_backups_dir()` 返回统一备份路径（`~/<数据目录>/svn_user_auth/backups/`），两个 Tab 共用。
 
 ## 注意事项
 
-- 目标平台为 Windows（`#![windows_subsystem = "windows"]` 隐藏控制台窗口）
-- 远程修改需要在程序安装目录下配置 `.env` 文件，包含 `USERNAME` 和 `PASSWORD`
-- druid 依赖来自 git，不是 crates.io 版本
+- 目标平台为 Windows（`#![windows_subsystem = "windows"]`）
+- 远程操作需在程序安装目录配置 `.env`，包含 `USERNAME` 和 `PASSWORD`
+- 瘦身功能支持 `DRY_RUN=1` 环境变量（只写本地，不推服务器）
+- druid 依赖来自 git，不是 crates.io 版本；`im::Vector<T>` 用于 druid Data 兼容的列表状态
+- `post_content` 需先调用 `get_file_content_from_remote(false)` 填充 SYNCHRONIZER_TOKEN，`apply_remote` 中已保证顺序
